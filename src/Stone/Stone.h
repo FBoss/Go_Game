@@ -1,16 +1,10 @@
 #ifndef STONE_H
 #define STONE_H
 
+namespace Go {
 
-namespace Go{
+enum class Stone { empty, black, white };
 
-enum class Stone{
-    empty,
-    black,
-    white
-};
+} // namespace Go
 
-} //namespace Go
-
-
-#endif //STONE_H
+#endif // STONE_H

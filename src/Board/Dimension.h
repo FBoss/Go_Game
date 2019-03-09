@@ -3,11 +3,11 @@
 
 namespace Go {
 
-struct Dimension{
- unsigned int row;
- unsigned int column;
+struct Dimension {
+  unsigned int row;
+  unsigned int column;
 };
 
-} //namespace Go
+} // namespace Go
 
-#endif //DIMENSION_H
+#endif // DIMENSION_H
