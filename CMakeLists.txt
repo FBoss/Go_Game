@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
+option(BUILD_TESTING "Build Test" ON)
 
+include(CTest)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -13,7 +15,6 @@ endif()
 add_subdirectory(src)
 
 if(BUILD_TESTING)
-  include(CTest)
   add_subdirectory(test)
 endif()
 

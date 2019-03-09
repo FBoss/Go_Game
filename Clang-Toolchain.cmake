@@ -1,10 +1,6 @@
 set(CMAKE_CXX_COMPILER clang++-7)
 set(CMAKE_C_COMPILER clang-7)
 
-
-set(BUILD_TESTING ON)
-
-
 set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -fprofile-instr-generate -fcoverage-mapping -Weverything -Wno-c++98-compat")
 
 
