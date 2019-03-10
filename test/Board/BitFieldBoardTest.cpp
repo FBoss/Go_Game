@@ -3,7 +3,6 @@
 #include "BoardTestStructure.h"
 
 #include "BitFieldBoard.h"
-#include "TwoDimensionArrayBoard.h"
 
 namespace {
 using testing::Types;

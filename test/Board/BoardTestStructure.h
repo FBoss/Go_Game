@@ -35,7 +35,7 @@ public:
     std::uniform_int_distribution<unsigned int> column_distribution(0, dim.column - 1);
     std::uniform_int_distribution<unsigned int> stone_distribution(0, 3);
 
-    for (int i = 0; i < dim.row * dim.column; ++i) {
+    for (unsigned int i = 0; i < dim.row * dim.column; ++i) {
       auto row = static_cast<unsigned int>(row_distribution(row_generator));
       auto column = static_cast<unsigned int>(column_distribution(column_generator));
       auto stone = static_cast<Go::Stone>(stone_distribution(stone_generator));
@@ -119,8 +119,8 @@ TYPED_TEST_P(BoardTest, EqualOperator) {
 
   Go::Dimension dim = board1.getDimension();
 
-  for (volatile int i = 0; i < dim.row; ++i) {
-    for (volatile int j = 0; j < dim.column; ++j) {
+  for (volatile unsigned int i = 0; i < dim.row; ++i) {
+    for (volatile unsigned int j = 0; j < dim.column; ++j) {
       board1.set(i, j, Go::Stone::black);
       EXPECT_FALSE(board1 == board2);
       board1.set(i, j, Go::Stone::empty);
@@ -141,8 +141,8 @@ TYPED_TEST_P(BoardTest, NotEqualOperator) {
 
   Go::Dimension dim = board1.getDimension();
 
-  for (volatile int i = 0; i < dim.row; ++i) {
-    for (volatile int j = 0; j < dim.column; ++j) {
+  for (volatile unsigned int i = 0; i < dim.row; ++i) {
+    for (volatile unsigned int j = 0; j < dim.column; ++j) {
       board1.set(i, j, Go::Stone::black);
       EXPECT_TRUE(board1 != board2);
       board1.set(i, j, Go::Stone::empty);
