@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 option(BUILD_TESTING "Build Test" ON)
+option(BUILD_BENCHMARKS "Build Benchmarks" ON)
 
 include(CTest)
 set(CMAKE_CXX_STANDARD 17)
@@ -18,6 +19,9 @@ if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
+if(BUILD_BENCHMARKS)
+  add_subdirectory(benchmarks)
+endif()
 
 #if(BUILD_TESTING)
 

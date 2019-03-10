@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 3.10)
+
+find_package (Threads REQUIRED)
+
+add_executable(RandomReadBenchmark RandomReadBenchmark.cpp)
+target_link_libraries(RandomReadBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkRandomRead COMMAND RandomReadBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkRandomRead.json)
+
+add_executable(SerialReadBenchmark SerialReadBenchmark.cpp)
+target_link_libraries(SerialReadBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialRead COMMAND SerialReadBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialRead.json)
+
+add_executable(SerialWriteBenchmark SerialWriteBenchmark.cpp)
+target_link_libraries(SerialWriteBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialWrite COMMAND SerialWriteBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialWrite.json)
+
+add_executable(RandomWriteBenchmark RandomWriteBenchmark.cpp)
+target_link_libraries(RandomWriteBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkRandomWrite COMMAND RandomWriteBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkRandomWrite.json)
+
+add_executable(DefaultConstructionBenchmark DefaultConstructionBenchmark.cpp)
+target_link_libraries(DefaultConstructionBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkDefaultConstruction COMMAND DefaultConstructionBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkDefaultConstruction.json)
+
+add_executable(EqualOperatorBenchmark EqualOperatorBenchmark.cpp)
+target_link_libraries(EqualOperatorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkEqualOperator COMMAND EqualOperatorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkEqualOperator.json)
+
+add_executable(NotEqualOperatorBenchmark NotEqualOperatorBenchmark.cpp)
+target_link_libraries(NotEqualOperatorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkNotEqualOperator COMMAND NotEqualOperatorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkNotEqualOperator.json)
+
+add_executable(CopyAssignBenchmark CopyAssignBenchmark.cpp)
+target_link_libraries(CopyAssignBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkCopyAssign COMMAND CopyAssignBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkCopyAssign.json)
+
+add_executable(MoveConstructionBenchmark MoveConstructionBenchmark.cpp)
+target_link_libraries(MoveConstructionBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkMoveConstruction COMMAND MoveConstructionBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkMoveConstruction.json)
+
+add_executable(MoveAssignBenchmark MoveAssignBenchmark.cpp)
+target_link_libraries(MoveAssignBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkMoveAssign COMMAND MoveAssignBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkMoveAssign.json)
+
+add_executable(CopyConstructionBenchmark CopyConstructionBenchmark.cpp)
+target_link_libraries(CopyConstructionBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkCopyConstruction COMMAND CopyConstructionBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkCopyConstruction.json)
