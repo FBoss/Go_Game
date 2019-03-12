@@ -23,20 +23,6 @@ template <class T> T create_randomizedBoard() {
   return board;
 }
 
-template <class T> void SerialRead(benchmark::State &state) {
-  T board = create_randomizedBoard<T>();
-
-  Go::Dimension dim = board.getDimension();
-
-  for (auto _ : state) {
-    for (volatile unsigned int row = 0; row < dim.row; ++row) {
-      for (volatile unsigned int column = 0; column < dim.column; ++column) {
-        board.get(row, column);
-      }
-    }
-  }
-}
-
 template <class T> void RandomRead(benchmark::State &state) {
   T board = create_randomizedBoard<T>();
 
@@ -64,7 +50,49 @@ template <class T> void RandomRead(benchmark::State &state) {
   }
 }
 
-template <class T> void SerialWrite(benchmark::State &state) {
+template <class T> void SerialReadColumnMajor(benchmark::State &state) {
+  T board = create_randomizedBoard<T>();
+
+  Go::Dimension dim = board.getDimension();
+
+  for (auto _ : state) {
+    for (volatile unsigned int column = 0; column < dim.column; ++column) {
+      for (volatile unsigned int row = 0; row < dim.row; ++row) {
+        board.get(row, column);
+      }
+    }
+  }
+}
+
+template <class T> void SerialWriteColumnMajor(benchmark::State &state) {
+  T board;
+
+  Go::Dimension dim = board.getDimension();
+
+  for (auto _ : state) {
+    for (volatile unsigned int column = 0; column < dim.column; ++column) {
+      for (volatile unsigned int row = 0; row < dim.row; ++row) {
+        board.set(row, column, Go::Stone::black);
+      }
+    }
+  }
+}
+
+template <class T> void SerialReadRowMajor(benchmark::State &state) {
+  T board = create_randomizedBoard<T>();
+
+  Go::Dimension dim = board.getDimension();
+
+  for (auto _ : state) {
+    for (volatile unsigned int row = 0; row < dim.row; ++row) {
+      for (volatile unsigned int column = 0; column < dim.column; ++column) {
+        board.get(row, column);
+      }
+    }
+  }
+}
+
+template <class T> void SerialWriteRowMajor(benchmark::State &state) {
   T board;
 
   Go::Dimension dim = board.getDimension();

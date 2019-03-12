@@ -6,13 +6,21 @@ add_executable(RandomReadBenchmark RandomReadBenchmark.cpp)
 target_link_libraries(RandomReadBenchmark benchmark Threads::Threads Board)
 add_test(NAME BoardsBenchmarkRandomRead COMMAND RandomReadBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkRandomRead.json)
 
-add_executable(SerialReadBenchmark SerialReadBenchmark.cpp)
-target_link_libraries(SerialReadBenchmark benchmark Threads::Threads Board)
-add_test(NAME BoardsBenchmarkSerialRead COMMAND SerialReadBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialRead.json)
+add_executable(SerialWriteRowMajorBenchmark SerialWriteRowMajorBenchmark.cpp)
+target_link_libraries(SerialWriteRowMajorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialWriteRowMajor COMMAND SerialWriteRowMajorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkRowMajorSerialWrite.json)
 
-add_executable(SerialWriteBenchmark SerialWriteBenchmark.cpp)
-target_link_libraries(SerialWriteBenchmark benchmark Threads::Threads Board)
-add_test(NAME BoardsBenchmarkSerialWrite COMMAND SerialWriteBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialWrite.json)
+add_executable(SerialReadRowMajorBenchmark SerialReadRowMajorBenchmark.cpp)
+target_link_libraries(SerialReadRowMajorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialReadRowMajor COMMAND SerialReadRowMajorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialReadRowMajor.json)
+
+add_executable(SerialReadColumnMajorBenchmark SerialReadColumnMajorBenchmark.cpp)
+target_link_libraries(SerialReadColumnMajorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialReadColumnMajor COMMAND SerialReadColumnMajorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialReadColumnMajor.json)
+
+add_executable(SerialWriteColumnMajorBenchmark SerialWriteColumnMajorBenchmark.cpp)
+target_link_libraries(SerialWriteColumnMajorBenchmark benchmark Threads::Threads Board)
+add_test(NAME BoardsBenchmarkSerialWriteColumnMajor COMMAND SerialWriteColumnMajorBenchmark --benchmark_out_format=json --benchmark_out=BoardsBenchmarkSerialWriteColumnMajor.json)
 
 add_executable(RandomWriteBenchmark RandomWriteBenchmark.cpp)
 target_link_libraries(RandomWriteBenchmark benchmark Threads::Threads Board)
