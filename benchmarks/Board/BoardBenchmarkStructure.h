@@ -12,8 +12,8 @@ template <class T> void SerialRead(benchmark::State &state) {
   Go::Dimension dim = board.getDimension();
 
   for (auto _ : state) {
-    for (unsigned int row = 0; row < dim.row; ++row) {
-      for (unsigned int column = 0; column < dim.column; ++column) {
+    for (volatile unsigned int row = 0; row < dim.row; ++row) {
+      for (volatile unsigned int column = 0; column < dim.column; ++column) {
         board.get(row, column);
       }
     }
@@ -53,8 +53,8 @@ template <class T> void SerialWrite(benchmark::State &state) {
   Go::Dimension dim = board.getDimension();
 
   for (auto _ : state) {
-    for (unsigned int row = 0; row < dim.row; ++row) {
-      for (unsigned int column = 0; column < dim.column; ++column) {
+    for (volatile unsigned int row = 0; row < dim.row; ++row) {
+      for (volatile unsigned int column = 0; column < dim.column; ++column) {
         board.set(row, column, Go::Stone::black);
       }
     }
