@@ -2,12 +2,29 @@
 #define BOARDBENCHMARKSTRUCTURE_H
 
 #include <algorithm>
+#include <random>
 
 #include "Dimension.h"
 #include "Stone.h"
 
-template <class T> void SerialRead(benchmark::State &state) {
+template <class T> T create_randomizedBoard() {
   T board;
+
+  Go::Dimension dim = board.getDimension();
+
+  std::mt19937 stone_generator(0);
+  std::uniform_int_distribution<unsigned int> stone_distribution(0, 3);
+
+  for (unsigned int row = 0; row < dim.row; ++row) {
+    for (unsigned int column = 0; column < dim.column; ++column) {
+      board.set(row, column, static_cast<Go::Stone>(stone_distribution(stone_generator)));
+    }
+  }
+  return board;
+}
+
+template <class T> void SerialRead(benchmark::State &state) {
+  T board = create_randomizedBoard<T>();
 
   Go::Dimension dim = board.getDimension();
 
@@ -21,7 +38,7 @@ template <class T> void SerialRead(benchmark::State &state) {
 }
 
 template <class T> void RandomRead(benchmark::State &state) {
-  T board;
+  T board = create_randomizedBoard<T>();
 
   Go::Dimension dim = board.getDimension();
 
