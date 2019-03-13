@@ -15,13 +15,15 @@ endif()
 
 add_subdirectory(src)
 
+if(BUILD_BENCHMARKS)
+  add_subdirectory(benchmarks)
+endif()
+
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
-if(BUILD_BENCHMARKS)
-  add_subdirectory(benchmarks)
-endif()
+
 
 #if(BUILD_TESTING)
 

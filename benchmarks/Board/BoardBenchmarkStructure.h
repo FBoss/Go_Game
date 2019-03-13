@@ -140,14 +140,14 @@ template <class T> void DefaultConstruction(benchmark::State &state) {
 }
 
 template <class T> void MoveConstruction(benchmark::State &state) {
-  T board1{};
+  T board1 = create_randomizedBoard<T>();
   for (auto _ : state) {
     T board2 = std::move(board1);
   }
 }
 
 template <class T> void MoveAssign(benchmark::State &state) {
-  T board1{};
+  T board1 = create_randomizedBoard<T>();
   T board2{};
   for (auto _ : state) {
     board2 = std::move(board1);
@@ -155,14 +155,14 @@ template <class T> void MoveAssign(benchmark::State &state) {
 }
 
 template <class T> void CopyConstruction(benchmark::State &state) {
-  T board1{};
+  T board1 = create_randomizedBoard<T>();
   for (auto _ : state) {
     T board2 = board1;
   }
 }
 
 template <class T> void CopyAssign(benchmark::State &state) {
-  T board1{};
+  T board1 = create_randomizedBoard<T>();
   T board2{};
   for (auto _ : state) {
     board2 = board1;
@@ -170,20 +170,24 @@ template <class T> void CopyAssign(benchmark::State &state) {
 }
 
 template <class T> void EqualOperator(benchmark::State &state) {
-  T board1{};
-  T board2{};
+  T board1 = create_randomizedBoard<T>();
+  T board2 = board1;
+
+  volatile bool value;
 
   for (auto _ : state) {
-    board1 == board2;
+    value = board1 == board2;
   }
 }
 
 template <class T> void NotEqualOperator(benchmark::State &state) {
-  T board1{};
-  T board2{};
+  T board1 = create_randomizedBoard<T>();
+  T board2 = board1;
+
+  volatile bool value;
 
   for (auto _ : state) {
-    board1 != board2;
+    value = board1 != board2;
   }
 }
 
