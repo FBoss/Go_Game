@@ -85,6 +85,22 @@ TYPED_TEST_P(BoardTest, GetOutOfRangePositive) {
   EXPECT_THROW(this->mBoard.get(dim.row, dim.column), std::out_of_range);
 }
 
+TYPED_TEST_P(BoardTest, SetOutOfRangePositive) {
+  Go::Dimension dim = this->mBoard.getDimension();
+
+  EXPECT_THROW(this->mBoard.set(dim.row, 0, Go::Stone::empty), std::out_of_range);
+  EXPECT_THROW(this->mBoard.set(0, dim.column, Go::Stone::empty), std::out_of_range);
+  EXPECT_THROW(this->mBoard.set(dim.row, dim.column, Go::Stone::empty), std::out_of_range);
+}
+
+TYPED_TEST_P(BoardTest, SetOutOfRangeNegative) {
+  Go::Dimension dim = this->mBoard.getDimension();
+
+  EXPECT_THROW(this->mBoard.set(-1, 0, Go::Stone::empty), std::out_of_range);
+  EXPECT_THROW(this->mBoard.set(0, -1, Go::Stone::empty), std::out_of_range);
+  EXPECT_THROW(this->mBoard.set(-1, -1, Go::Stone::empty), std::out_of_range);
+}
+
 TYPED_TEST_P(BoardTest, RandomReadWrite) {
   Go::Dimension dim = this->mBoard.getDimension();
 
@@ -154,32 +170,37 @@ TYPED_TEST_P(BoardTest, DefaultConstructible) { EXPECT_TRUE(std::is_default_cons
 TYPED_TEST_P(BoardTest, MoveConstructible) {
   EXPECT_TRUE(std::is_move_constructible<decltype(this->mBoard)>::value);
 
-  decltype(this->mBoard) board1{};
+  decltype(this->mBoard) board1{}, excpected_board{};
 
   Go::Dimension dim = board1.getDimension();
   if (dim.row > 0 && dim.column > 0) {
     board1.set(0, 0, Go::Stone::black);
+    excpected_board.set(0, 0, Go::Stone::black);
   }
 
   decltype(this->mBoard) board2 = std::move(board1);
 
-  EXPECT_EQ(board1, board2);
+  EXPECT_EQ(excpected_board, board2);
 }
+
 TYPED_TEST_P(BoardTest, MoveAssignable) {
   EXPECT_TRUE(std::is_move_assignable<decltype(this->mBoard)>::value);
 
-  decltype(this->mBoard) board1{}, board2{};
+  decltype(this->mBoard) board1{}, board2{}, excpected_board{};
 
   Go::Dimension dim = board1.getDimension();
   if (dim.row > 0 && dim.column > 0) {
     board1.set(0, 0, Go::Stone::black);
+    excpected_board.set(0, 0, Go::Stone::black);
   }
 
   board2 = std::move(board1);
 
-  EXPECT_EQ(board1, board2);
+  EXPECT_EQ(excpected_board, board2);
 }
+
 TYPED_TEST_P(BoardTest, Destructible) { EXPECT_TRUE(std::is_destructible<decltype(this->mBoard)>::value); }
+
 TYPED_TEST_P(BoardTest, CopyConstructible) {
   EXPECT_TRUE(std::is_copy_constructible<decltype(this->mBoard)>::value);
 
@@ -212,7 +233,8 @@ TYPED_TEST_P(BoardTest, CopyAssignable) {
 
 REGISTER_TYPED_TEST_CASE_P(BoardTest, // The first argument is the test case name.
                                       // The rest of the arguments are the test names.
-                           DefaultValue, GetOutOfRangeNegative, GetOutOfRangePositive, RandomReadWrite,
+                           DefaultValue, GetOutOfRangeNegative, GetOutOfRangePositive, SetOutOfRangeNegative, SetOutOfRangePositive,
+                           RandomReadWrite,
 
                            DefaultConstructible, EqualOperatorDefaultConstructible, EqualOperator, NotEqualOperatorDefaultConstructible,
                            NotEqualOperator, MoveConstructible, MoveAssignable, Destructible, CopyConstructible, CopyAssignable);

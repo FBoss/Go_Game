@@ -14,5 +14,7 @@ add_executable(ArrayBoardTest ArrayBoardTest.cpp)
 target_link_libraries(ArrayBoardTest GTest::Main Board)
 add_test(NAME ArrayBoard COMMAND ArrayBoardTest)
 
-# Benchmark
+add_executable(MapBoardTest MapBoardTest.cpp)
+target_link_libraries(MapBoardTest GTest::Main Board)
+add_test(NAME MapBoard COMMAND MapBoardTest)
 
