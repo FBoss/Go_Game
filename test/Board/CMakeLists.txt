@@ -18,3 +18,7 @@ add_executable(MapBoardTest MapBoardTest.cpp)
 target_link_libraries(MapBoardTest GTest::Main Board)
 add_test(NAME MapBoard COMMAND MapBoardTest)
 
+add_executable(UnorderedMapBoardTest UnorderedMapBoardTest.cpp)
+target_link_libraries(UnorderedMapBoardTest GTest::Main Board)
+add_test(NAME UnorderedMapBoard COMMAND UnorderedMapBoardTest)
+
