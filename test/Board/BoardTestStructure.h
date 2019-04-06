@@ -230,6 +230,11 @@ TYPED_TEST_P(BoardTest, CopyAssignable) {
 
   EXPECT_EQ(board1, board2);
 }
+/*
+TYPED_TEST_P(BoardTest, LiteralType) {
+  EXPECT_TRUE(std::is_literal_type<decltype(this->mBoard)>::value);
+}
+*/
 
 REGISTER_TYPED_TEST_CASE_P(BoardTest, // The first argument is the test case name.
                                       // The rest of the arguments are the test names.
@@ -237,7 +242,7 @@ REGISTER_TYPED_TEST_CASE_P(BoardTest, // The first argument is the test case nam
                            RandomReadWrite,
 
                            DefaultConstructible, EqualOperatorDefaultConstructible, EqualOperator, NotEqualOperatorDefaultConstructible,
-                           NotEqualOperator, MoveConstructible, MoveAssignable, Destructible, CopyConstructible, CopyAssignable);
+                           NotEqualOperator, MoveConstructible, MoveAssignable, Destructible, CopyConstructible, CopyAssignable/*, LiteralType*/);
 
 } // namespace
 

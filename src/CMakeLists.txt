@@ -7,3 +7,6 @@ target_include_directories(Stone INTERFACE Stone)
 add_library(Board INTERFACE)
 target_include_directories(Board INTERFACE Board)
 target_link_libraries(Board INTERFACE Stone)
+
+
+add_subdirectory(GoTextProtocol)
