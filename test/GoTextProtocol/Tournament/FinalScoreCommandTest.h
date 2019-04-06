@@ -4,19 +4,18 @@
 #include "FinalScoreCommand.h"
 
 namespace {
-    TEST(FinalScoreCommand, OutputWithId) {
-        auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FinalScoreCommand{256});
+TEST(FinalScoreCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FinalScoreCommand{256});
 
-        EXPECT_EQ("256 final_score\n", test);
-    }
+  EXPECT_EQ("256 final_score\n", test);
+}
 
-    TEST(FinalScoreCommand, OutputWithoutId) {
+TEST(FinalScoreCommand, OutputWithoutId) {
 
-        auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FinalScoreCommand{});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FinalScoreCommand{});
 
-        EXPECT_EQ("final_score\n", test);
-    }
-} //namespace
+  EXPECT_EQ("final_score\n", test);
+}
+} // namespace
 
-
-#endif //FINALSCORECOMMANDTEST_H
+#endif // FINALSCORECOMMANDTEST_H

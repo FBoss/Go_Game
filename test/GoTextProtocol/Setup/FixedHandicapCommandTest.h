@@ -4,19 +4,18 @@
 #include "FixedHandicapCommand.h"
 
 namespace {
-    TEST(FixedHandicap, OutputWithId    ) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FixedHandicapCommand{256, 4});
+TEST(FixedHandicap, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FixedHandicapCommand{256, 4});
 
-    EXPECT_EQ("256 fixed_handicap 4\n", test);
+  EXPECT_EQ("256 fixed_handicap 4\n", test);
 }
 
 TEST(FixedHandicap, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string( Go::GoTextProtocol::FixedHandicapCommand{-4});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::FixedHandicapCommand{-4});
 
-EXPECT_EQ("fixed_handicap -4\n", test);
+  EXPECT_EQ("fixed_handicap -4\n", test);
 }
-} //namespace
+} // namespace
 
-
-#endif //FINALSCORECOMMANDTEST_H
+#endif // FINALSCORECOMMANDTEST_H

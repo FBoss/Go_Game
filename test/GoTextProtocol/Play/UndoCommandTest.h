@@ -4,19 +4,18 @@
 #include "UndoCommand.h"
 
 namespace {
-    TEST(UndoCommand, OutputWithId) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::UndoCommand{256});
+TEST(UndoCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::UndoCommand{256});
 
-    EXPECT_EQ("256 undo\n", test);
+  EXPECT_EQ("256 undo\n", test);
 }
 
 TEST(UndoCommand, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::UndoCommand{});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::UndoCommand{});
 
-EXPECT_EQ("undo\n", test);
+  EXPECT_EQ("undo\n", test);
 }
-} //namespace
+} // namespace
 
-
-#endif //UNDOCOMMANDTEST_H
+#endif // UNDOCOMMANDTEST_H

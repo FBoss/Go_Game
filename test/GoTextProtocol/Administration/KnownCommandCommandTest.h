@@ -4,20 +4,18 @@
 #include "KnownCommandCommand.h"
 
 namespace {
-    TEST(KnownCommandCommand, OutputWithId) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::KnownCommandCommand{256});
+TEST(KnownCommandCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::KnownCommandCommand{256});
 
-    EXPECT_EQ("256 known_command\n", test);
+  EXPECT_EQ("256 known_command\n", test);
 }
 
 TEST(KnownCommandCommand, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::KnownCommandCommand{});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::KnownCommandCommand{});
 
-EXPECT_EQ("known_command\n", test);
+  EXPECT_EQ("known_command\n", test);
 }
-} //namespace
+} // namespace
 
-
-
-#endif //KNOWNCOMMANDCOMMANDTEST_H
+#endif // KNOWNCOMMANDCOMMANDTEST_H

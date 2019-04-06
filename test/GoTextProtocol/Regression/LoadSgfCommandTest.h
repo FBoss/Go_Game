@@ -4,26 +4,25 @@
 #include "LoadSgfCommand.h"
 
 namespace {
-    TEST(LoadSgfCommand, OutputWithId) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{256, "file", 5});
+TEST(LoadSgfCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{256, "file", 5});
 
-    EXPECT_EQ("256 loadsgf file 5\n", test);
+  EXPECT_EQ("256 loadsgf file 5\n", test);
 }
 
 TEST(LoadSgfCommand, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{"file", 0});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{"file", 0});
 
-EXPECT_EQ("loadsgf file 0\n", test);
+  EXPECT_EQ("loadsgf file 0\n", test);
 }
 
-    TEST(LoadSgfCommand, EmptyFileName) {
+TEST(LoadSgfCommand, EmptyFileName) {
 
-        auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{"", 0});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::LoadSgfCommand{"", 0});
 
-        EXPECT_EQ("loadsgf  0\n", test);
-    }
+  EXPECT_EQ("loadsgf  0\n", test);
 }
+} // namespace
 
-
-#endif //LOADSGFCOMMANDTEST_H
+#endif // LOADSGFCOMMANDTEST_H

@@ -4,19 +4,18 @@
 #include "ListCommandsCommand.h"
 
 namespace {
-    TEST(ListCommandsCommand, OutputWithId) {
-        auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ListCommandsCommand{256});
+TEST(ListCommandsCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ListCommandsCommand{256});
 
-        EXPECT_EQ("256 list_commands\n", test);
-    }
+  EXPECT_EQ("256 list_commands\n", test);
+}
 
-    TEST(ListCommandsCommand, OutputWithoutId) {
+TEST(ListCommandsCommand, OutputWithoutId) {
 
-        auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ListCommandsCommand{});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ListCommandsCommand{});
 
-        EXPECT_EQ("list_commands\n", test);
-    }
-} //namespace
+  EXPECT_EQ("list_commands\n", test);
+}
+} // namespace
 
-
-#endif //LISTCOMMANDSCOMMANDTEST_H
+#endif // LISTCOMMANDSCOMMANDTEST_H

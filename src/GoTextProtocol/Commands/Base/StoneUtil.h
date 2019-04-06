@@ -3,9 +3,6 @@
 
 struct Stone
 
-namespace Go::GoTextProtocol{
+    namespace Go::GoTextProtocol {} // namespace Go::GoTextProtocol
 
-} // namespace Go::GoTextProtocol
-
-
-#endif //GTPSTONEUTIL_H
+#endif // GTPSTONEUTIL_H

@@ -6,16 +6,12 @@
 
 namespace Go::GoTextProtocol {
 
-    struct NameCommand : public Command {
-        constexpr explicit NameCommand(unsigned int id) noexcept: Command({id, "name"}) {};
-        constexpr explicit NameCommand() noexcept: Command({std::nullopt, "name"}) {};
-    };
+struct NameCommand : public Command {
+  constexpr explicit NameCommand(unsigned int id) noexcept : Command({id, "name"}){};
+  constexpr explicit NameCommand() noexcept : Command({std::nullopt, "name"}){};
+};
 
-
-	auto to_string(NameCommand const & command){
-		return to_string(static_cast<Command>(command)) + '\n';
-	}
+auto to_string(NameCommand const &command) { return to_string(static_cast<Command>(command)) + '\n'; }
 } // namespace Go::GoTextProtocol
 
-
-#endif //NAMECOMMAND_H
+#endif // NAMECOMMAND_H

@@ -242,7 +242,8 @@ REGISTER_TYPED_TEST_CASE_P(BoardTest, // The first argument is the test case nam
                            RandomReadWrite,
 
                            DefaultConstructible, EqualOperatorDefaultConstructible, EqualOperator, NotEqualOperatorDefaultConstructible,
-                           NotEqualOperator, MoveConstructible, MoveAssignable, Destructible, CopyConstructible, CopyAssignable/*, LiteralType*/);
+                           NotEqualOperator, MoveConstructible, MoveAssignable, Destructible, CopyConstructible,
+                           CopyAssignable /*, LiteralType*/);
 
 } // namespace
 

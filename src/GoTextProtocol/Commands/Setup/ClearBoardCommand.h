@@ -6,16 +6,12 @@
 
 namespace Go::GoTextProtocol {
 
-    struct ClearBoardCommand : public Command {
-        constexpr explicit ClearBoardCommand(unsigned int id) noexcept: Command({id, "clear_board"}) {};
-        constexpr explicit ClearBoardCommand() noexcept: Command({std::nullopt, "clear_board"}) {};
-    };
+struct ClearBoardCommand : public Command {
+  constexpr explicit ClearBoardCommand(unsigned int id) noexcept : Command({id, "clear_board"}){};
+  constexpr explicit ClearBoardCommand() noexcept : Command({std::nullopt, "clear_board"}){};
+};
 
-
-    auto to_string(ClearBoardCommand const & command){
-        return to_string(static_cast<Command>(command)) + '\n';
-    }
+auto to_string(ClearBoardCommand const &command) { return to_string(static_cast<Command>(command)) + '\n'; }
 } // namespace Go::GoTextProtocol
 
-
-#endif //CLEARBOARDCOMMAND_H
+#endif // CLEARBOARDCOMMAND_H

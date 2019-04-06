@@ -6,17 +6,12 @@
 
 namespace Go::GoTextProtocol {
 
-    struct VersionCommand : public Command {
-        constexpr explicit VersionCommand(unsigned int id) noexcept: Command({id, "version"}) {};
-        constexpr explicit VersionCommand() noexcept: Command({std::nullopt, "version"}) {};
-    };
+struct VersionCommand : public Command {
+  constexpr explicit VersionCommand(unsigned int id) noexcept : Command({id, "version"}){};
+  constexpr explicit VersionCommand() noexcept : Command({std::nullopt, "version"}){};
+};
 
-
-
-	auto to_string(VersionCommand const & command){
-		return to_string(static_cast<Command>(command)) + '\n';
-	}
+auto to_string(VersionCommand const &command) { return to_string(static_cast<Command>(command)) + '\n'; }
 } // namespace Go::GoTextProtocol
 
-
-#endif //VERSIONCOMMAND_H
+#endif // VERSIONCOMMAND_H

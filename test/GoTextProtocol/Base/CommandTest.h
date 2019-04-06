@@ -4,18 +4,18 @@
 #include "Command.h"
 
 namespace {
-    TEST(Command, OutputWithId    ) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::Command{256, "test"});
+TEST(Command, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::Command{256, "test"});
 
-    EXPECT_EQ("256 test", test);
+  EXPECT_EQ("256 test", test);
 }
 
 TEST(Command, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::Command{std::nullopt, "test"});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::Command{std::nullopt, "test"});
 
-EXPECT_EQ("test", test);
+  EXPECT_EQ("test", test);
 }
-}
+} // namespace
 
-#endif //COMMANDTEST_H
+#endif // COMMANDTEST_H

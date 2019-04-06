@@ -4,19 +4,18 @@
 #include "ClearBoardCommand.h"
 
 namespace {
-    TEST(ClearBoardCommand, OutputWithId    ) {
-    auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ClearBoardCommand{256});
+TEST(ClearBoardCommand, OutputWithId) {
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ClearBoardCommand{256});
 
-    EXPECT_EQ("256 clear_board\n", test);
+  EXPECT_EQ("256 clear_board\n", test);
 }
 
 TEST(ClearBoardCommand, OutputWithoutId) {
 
-auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ClearBoardCommand{});
+  auto test = Go::GoTextProtocol::to_string(Go::GoTextProtocol::ClearBoardCommand{});
 
-EXPECT_EQ("clear_board\n", test);
+  EXPECT_EQ("clear_board\n", test);
 }
-} //namespace
+} // namespace
 
-
-#endif //CLEARBOARDCOMMANDTEST_H
+#endif // CLEARBOARDCOMMANDTEST_H
