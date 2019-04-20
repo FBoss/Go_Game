@@ -1,6 +1,7 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
+#include "Word.h"
 #include <optional>
 #include <sstream>
 #include <string_view>
@@ -9,15 +10,15 @@ namespace Go::GoTextProtocol {
 
 struct Command {
   std::optional<unsigned int> id = std::nullopt;
-  const std::string_view command;
+  const Word command;
 };
 
 auto to_string(Command const &command) {
   if (command.id.has_value()) {
-    return std::to_string(command.id.value()) + ' ' + std::string{command.command};
+    return std::to_string(command.id.value()) + ' ' + std::string{command.command.data()};
   } else {
 
-    return std::string{command.command};
+    return std::string{command.command.data()};
   }
 }
 
