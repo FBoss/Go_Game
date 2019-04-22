@@ -15,3 +15,12 @@ target_include_directories(CommandToStringTest PRIVATE
 )
 add_test(NAME CommandToString COMMAND CommandToStringTest)
 
+
+add_executable(UtilTest
+  Util/CommandExtractorTest.cpp
+  Util/IntegerTest.cpp
+  Util/WordExtractorTest.cpp
+)
+target_link_libraries(UtilTest GTest::Main GTPUtil)
+add_test(NAME Util COMMAND UtilTest)
+
