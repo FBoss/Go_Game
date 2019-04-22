@@ -5,13 +5,13 @@ find_package(GTest REQUIRED)
 add_executable(CommandToStringTest CommandGeneratorTest.cpp)
 target_link_libraries(CommandToStringTest GTest::Main GTPCommands)
 target_include_directories(CommandToStringTest PRIVATE
-	Administration
-	Base
-	Debug
-	Play
-	Regression
-	Setup
-	Tournament
+  Commands/Administration
+  Commands/Base
+  Commands/Debug
+  Commands/Play
+  Commands/Regression
+  Commands/Setup
+  Commands/Tournament
 )
 add_test(NAME CommandToString COMMAND CommandToStringTest)
 
