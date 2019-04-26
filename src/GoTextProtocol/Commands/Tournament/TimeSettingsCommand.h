@@ -12,10 +12,10 @@ struct TimeSettingsCommand : public Command {
   unsigned int byo_yomi_stones = 0;
   constexpr explicit TimeSettingsCommand(const unsigned int id, const unsigned int main_time, const unsigned int byo_yomi_time,
                                          const unsigned int byo_yomi_stones) noexcept
-      : Command({id, "time_settings"}), main_time{main_time}, byo_yomi_time{byo_yomi_time}, byo_yomi_stones{byo_yomi_stones} {};
+      : Command{id, "time_settings"}, main_time{main_time}, byo_yomi_time{byo_yomi_time}, byo_yomi_stones{byo_yomi_stones} {};
   constexpr explicit TimeSettingsCommand(const unsigned int main_time, const unsigned int byo_yomi_time,
                                          const unsigned int byo_yomi_stones) noexcept
-      : Command({std::nullopt, "time_settings"}), main_time{main_time}, byo_yomi_time{byo_yomi_time}, byo_yomi_stones{byo_yomi_stones} {};
+      : Command{std::nullopt, "time_settings"}, main_time{main_time}, byo_yomi_time{byo_yomi_time}, byo_yomi_stones{byo_yomi_stones} {};
 };
 
 auto to_string(TimeSettingsCommand const &command) {

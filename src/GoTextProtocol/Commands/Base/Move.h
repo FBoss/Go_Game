@@ -11,7 +11,6 @@ struct Move {};
 struct VertexMove : Move {
   Stone color;
   Vertex vertex;
-  constexpr explicit VertexMove(const Stone stone, Vertex &&vertex) noexcept : color{stone}, vertex{vertex} {};
 };
 
 struct PassMove : Move {

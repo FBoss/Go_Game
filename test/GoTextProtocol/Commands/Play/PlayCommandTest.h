@@ -20,7 +20,7 @@ TEST(PlayCommand, PassOutputWithoutId) {
 TEST(PlayCommand, VertexMoveOutputWitId) {
 
   auto test = Go::GoTextProtocol::to_string(
-      Go::GoTextProtocol::PlayCommand{256, Go::GoTextProtocol::VertexMove{Go::Stone::white, Go::GoTextProtocol::Vertex{1, 1}}});
+      Go::GoTextProtocol::PlayCommand{256, Go::GoTextProtocol::VertexMove{{}, Go::Stone::white, Go::GoTextProtocol::Vertex{1, 1}}});
 
   EXPECT_EQ("256 play W B2\n", test);
 }
@@ -28,7 +28,7 @@ TEST(PlayCommand, VertexMoveOutputWitId) {
 TEST(PlayCommand, VertexMoveOutputWithoutId) {
 
   auto test = Go::GoTextProtocol::to_string(
-      Go::GoTextProtocol::PlayCommand{Go::GoTextProtocol::VertexMove{Go::Stone::white, Go::GoTextProtocol::Vertex{1, 1}}});
+      Go::GoTextProtocol::PlayCommand{Go::GoTextProtocol::VertexMove{{}, Go::Stone::white, Go::GoTextProtocol::Vertex{1, 1}}});
 
   EXPECT_EQ("play W B2\n", test);
 }
@@ -46,6 +46,7 @@ TEST(PlayCommand, ResignMoveOutputWithoutId) {
 
   EXPECT_EQ("play resign\n", test);
 }
+
 } // namespace
 
 #endif // PLAYCOMMANDTEST_H

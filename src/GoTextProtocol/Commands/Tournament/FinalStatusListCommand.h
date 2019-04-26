@@ -11,9 +11,9 @@ enum class GameStatus { alive, seki, dead };
 struct FinalStatusListCommand : public Command {
   GameStatus status;
   constexpr explicit FinalStatusListCommand(const unsigned int id, const GameStatus status) noexcept
-      : Command({id, "final_status_list"}), status{status} {};
+      : Command{id, "final_status_list"}, status{status} {};
   constexpr explicit FinalStatusListCommand(const GameStatus status) noexcept
-      : Command({std::nullopt, "final_status_list"}), status{status} {};
+      : Command{std::nullopt, "final_status_list"}, status{status} {};
 };
 
 auto to_string(GameStatus const &status) {

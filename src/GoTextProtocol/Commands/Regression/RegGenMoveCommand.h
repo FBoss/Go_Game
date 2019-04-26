@@ -9,8 +9,8 @@ namespace Go::GoTextProtocol {
 
 struct RegGenMoveCommand : public Command {
   Stone color;
-  constexpr explicit RegGenMoveCommand(const unsigned int id, const Stone color) noexcept : Command({id, "reg_genmove"}), color{color} {};
-  constexpr explicit RegGenMoveCommand(const Stone color) noexcept : Command({std::nullopt, "reg_genmove"}), color{color} {};
+  constexpr explicit RegGenMoveCommand(const unsigned int id, const Stone color) noexcept : Command{id, "reg_genmove"}, color{color} {};
+  constexpr explicit RegGenMoveCommand(const Stone color) noexcept : Command{std::nullopt, "reg_genmove"}, color{color} {};
 };
 
 auto to_string(RegGenMoveCommand const &command) {

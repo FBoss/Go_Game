@@ -12,9 +12,9 @@ struct TimeLeftCommand : public Command {
   unsigned int time = 0;
   unsigned int stones = 0;
   constexpr explicit TimeLeftCommand(const unsigned int id, const Stone color, const unsigned int time, const unsigned int stones) noexcept
-      : Command({id, "time_left"}), color{color}, time{time}, stones{stones} {};
+      : Command{id, "time_left"}, color{color}, time{time}, stones{stones} {};
   constexpr explicit TimeLeftCommand(const Stone color, const unsigned int time, const unsigned int stones) noexcept
-      : Command({std::nullopt, "time_left"}), color{color}, time{time}, stones{stones} {};
+      : Command{std::nullopt, "time_left"}, color{color}, time{time}, stones{stones} {};
 };
 
 auto to_string(TimeLeftCommand const &command) {

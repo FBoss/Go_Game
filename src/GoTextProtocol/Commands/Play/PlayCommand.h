@@ -11,11 +11,11 @@ namespace Go::GoTextProtocol {
 struct PlayCommand : public Command {
   std::variant<VertexMove, PassMove, ResignMove> move;
   constexpr explicit PlayCommand(const unsigned int id, std::variant<VertexMove, PassMove, ResignMove> &&move) noexcept
-      : Command({id, "play"}), move{move} {};
+      : Command{id, "play"}, move{move} {};
   constexpr explicit PlayCommand(std::variant<VertexMove, PassMove, ResignMove> &&move) noexcept
-      : Command({std::nullopt, "play"}), move{move} {};
-  constexpr explicit PlayCommand() noexcept : Command({std::nullopt, "play"}), move{PassMove{}} {};
-  constexpr explicit PlayCommand(const unsigned int id) noexcept : Command({id, "play"}), move{PassMove{}} {};
+      : Command{std::nullopt, "play"}, move{move} {};
+  constexpr explicit PlayCommand() noexcept : Command{std::nullopt, "play"}, move{PassMove{}} {};
+  constexpr explicit PlayCommand(const unsigned int id) noexcept : Command{id, "play"}, move{PassMove{}} {};
 };
 
 template <class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
