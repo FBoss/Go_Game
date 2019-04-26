@@ -9,6 +9,7 @@
 namespace Go::GoTextProtocol::Util {
 
 constexpr auto extractCommand(std::string_view view) noexcept {
+
   WordExtractor extractor{view};
 
   auto first_word = extractor.nextWord();

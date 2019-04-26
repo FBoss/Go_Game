@@ -20,9 +20,10 @@ public:
     Word word{};
 
     size_t word_index = 0;
+    size_t nextword_index = 0;
 
-    for (auto iterator = input.begin(); iterator != input.end() && word_index < word.size(); ++iterator) {
-      auto character = *iterator;
+    for (auto character : input) {
+      ++nextword_index;
       if (character == ' ' || character == '\t' || character == '\n') {
         break;
       }
@@ -34,13 +35,10 @@ public:
       ++word_index;
     }
 
-    auto word_separator_index = input.find_first_of("\t\n ");
-
-    if (word_separator_index == std::string_view::npos) {
+    if (nextword_index >= input.size()) {
       input = input.substr(0, 0);
     } else {
-      auto last_index = input.size() - word_separator_index;
-      input = input.substr(word_separator_index + 1, last_index);
+      input = input.substr(nextword_index);
     }
 
     word.at(maxWordLength()) = '\0';
