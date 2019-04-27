@@ -58,4 +58,17 @@ TEST(StrasbourgEngine, VersionCommandWithId) {
   auto value = engine.run("1234 version");
   EXPECT_EQ("=1234 1.0\n\n", value);
 }
+
+TEST(StrasbourgEngine, ListCommandsCommandWithId) {
+  Go::GoTextProtocol::Engine::StrasbourgEngine engine{};
+  auto value = engine.run("1234 list_commands");
+  EXPECT_EQ(std::string{"=1234 name\nprotocol_version\nversion\nlist_commands\n\n"}, value);
+}
+
+TEST(StrasbourgEngine, ListCommandsCommandWithoutId) {
+  Go::GoTextProtocol::Engine::StrasbourgEngine engine{};
+  auto value = engine.run("list_commands");
+  EXPECT_EQ(std::string{"= name\nprotocol_version\nversion\nlist_commands\n\n"}, value);
+}
+
 } // namespace

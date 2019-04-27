@@ -26,6 +26,11 @@ auto Go::GoTextProtocol::Engine::StrasbourgEngine::run(std::string_view view) no
     response = std::string{"=" + id + " 2"};
   } else if ("version" == command_text) {
     response = std::string{"=" + id + " 1.0"};
+  } else if ("list_commands" == command_text) {
+    response = std::string{"=" + id + " name"};
+    response.append("\nprotocol_version");
+    response.append("\nversion");
+    response.append("\nlist_commands");
   }
 
   return response + "\n\n";
