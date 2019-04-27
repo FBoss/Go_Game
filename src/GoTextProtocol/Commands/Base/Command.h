@@ -1,5 +1,5 @@
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef GTPCOMMAND_H
+#define GTPCOMMAND_H
 
 #include "Word.h"
 #include <optional>
@@ -13,7 +13,7 @@ struct Command {
   const Word command;
 };
 
-auto to_string(Command const &command) {
+inline auto to_string(Command const &command) {
   if (command.id.has_value()) {
     return std::to_string(command.id.value()) + ' ' + std::string{command.command.data()};
   } else {
@@ -22,11 +22,11 @@ auto to_string(Command const &command) {
   }
 }
 
-auto to_string(const float value) {
+inline auto to_string(const float value) {
   std::stringstream ss;
   ss << value;
   return ss.str();
 }
 } // namespace Go::GoTextProtocol
 
-#endif // COMMAND_H
+#endif // GTPCOMMAND_H
