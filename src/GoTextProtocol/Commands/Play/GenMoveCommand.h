@@ -2,6 +2,7 @@
 #define GENMOVECOMMAND_H
 
 #include "Command.h"
+#include "GTPStoneUtils.h"
 #include "Stone.h"
 #include <optional>
 

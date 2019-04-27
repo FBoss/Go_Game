@@ -24,3 +24,6 @@ add_executable(UtilTest
 )
 target_link_libraries(UtilTest GTest::Main GTPUtil)
 add_test(NAME Util COMMAND UtilTest)
+
+
+add_subdirectory(Engine)
