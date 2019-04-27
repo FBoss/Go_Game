@@ -16,9 +16,12 @@ auto Go::GoTextProtocol::Engine::StrasbourgEngine::run(std::string_view view) no
   if (command.id.has_value()) {
     id = std::to_string(command.id.value());
   }
+  auto command_text = std::string{command.command.data()};
 
-  if ("name" == std::string{command.command.data()}) {
+  if ("name" == command_text) {
     return std::string{"=" + id + " HSLU Strasbourg Engine"};
+  } else if ("protocol_version" == command_text) {
+    return std::string{"=" + id + " 2"};
   }
 
   return std::string{"?" + id + " unknown command"};

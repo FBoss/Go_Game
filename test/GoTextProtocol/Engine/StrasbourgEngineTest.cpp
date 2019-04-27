@@ -35,4 +35,15 @@ TEST(StrasbourgEngine, NameCommandWithId) {
   EXPECT_EQ("=1234 HSLU Strasbourg Engine", value);
 }
 
+TEST(StrasbourgEngine, ProtocolVersionCommandWithoutId) {
+  Go::GoTextProtocol::Engine::StrasbourgEngine engine{};
+  auto value = engine.run("protocol_version");
+  EXPECT_EQ("= 2", value);
+}
+
+TEST(StrasbourgEngine, ProtocolVersionCommandWithId) {
+  Go::GoTextProtocol::Engine::StrasbourgEngine engine{};
+  auto value = engine.run("1234 protocol_version");
+  EXPECT_EQ("=1234 2", value);
+}
 } // namespace
