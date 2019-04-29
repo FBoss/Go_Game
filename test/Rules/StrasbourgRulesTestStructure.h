@@ -51,7 +51,7 @@ TYPED_TEST_P(StrasbourgRulesTest, blackMove) {
 }
 
 TYPED_TEST_P(StrasbourgRulesTest, whiteMove) {
-  this->mRuleSet.black_move(0, 0);
+  this->mRuleSet.black_move(0, 1);
   this->mRuleSet.white_move(0, 0);
 
   auto board = this->mRuleSet.getBoard();
@@ -76,11 +76,11 @@ TYPED_TEST_P(StrasbourgRulesTest, alternatingTurn) {
   EXPECT_EQ(Go::Rulset::GameState::black_turn, this->mRuleSet.game_state());
   this->mRuleSet.black_move(0, 0);
   EXPECT_EQ(Go::Rulset::GameState::white_turn, this->mRuleSet.game_state());
-  this->mRuleSet.white_move(0, 0);
+  this->mRuleSet.white_move(0, 1);
   EXPECT_EQ(Go::Rulset::GameState::black_turn, this->mRuleSet.game_state());
-  this->mRuleSet.black_move(0, 0);
+  this->mRuleSet.black_move(0, 2);
   EXPECT_EQ(Go::Rulset::GameState::white_turn, this->mRuleSet.game_state());
-  this->mRuleSet.white_move(0, 0);
+  this->mRuleSet.white_move(0, 3);
   EXPECT_EQ(Go::Rulset::GameState::black_turn, this->mRuleSet.game_state());
 }
 
@@ -90,21 +90,28 @@ TYPED_TEST_P(StrasbourgRulesTest, alternatingWrongTurn) {
   this->mRuleSet.black_move(0, 0);
 
   EXPECT_THROW(this->mRuleSet.black_move(0, 0), Go::Rulset::IllegalMove);
-  this->mRuleSet.white_move(0, 0);
+  this->mRuleSet.white_move(0, 1);
 
   EXPECT_THROW(this->mRuleSet.white_move(0, 0), Go::Rulset::IllegalMove);
-  this->mRuleSet.black_move(0, 0);
+  this->mRuleSet.black_move(0, 2);
 
   EXPECT_THROW(this->mRuleSet.black_move(0, 0), Go::Rulset::IllegalMove);
-  this->mRuleSet.white_move(0, 0);
+  this->mRuleSet.white_move(0, 3);
 
   EXPECT_THROW(this->mRuleSet.white_move(0, 0), Go::Rulset::IllegalMove);
+  this->mRuleSet.black_move(0, 4);
+}
+
+TYPED_TEST_P(StrasbourgRulesTest, overwriteAlreadeUsedPoint) {
   this->mRuleSet.black_move(0, 0);
+  EXPECT_THROW(this->mRuleSet.white_move(0, 0), Go::Rulset::IllegalMove);
+  this->mRuleSet.white_move(0, 1);
+  EXPECT_THROW(this->mRuleSet.black_move(0, 1), Go::Rulset::IllegalMove);
 }
 
 REGISTER_TYPED_TEST_CASE_P(StrasbourgRulesTest, // The first argument is the test case name.
                                                 // The rest of the arguments are the test names.
-                           emptyBoard, blackMove, whiteMove, alternatingTurn, alternatingWrongTurn);
+                           emptyBoard, blackMove, whiteMove, alternatingTurn, alternatingWrongTurn, overwriteAlreadeUsedPoint);
 
 } // namespace
 

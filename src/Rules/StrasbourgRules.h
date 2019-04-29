@@ -14,6 +14,8 @@ public:
   constexpr auto black_move(unsigned int row, unsigned int column) {
     if (mState != GameState::black_turn) {
       throw IllegalMove("Not blacks turn");
+    } else if (mBoard.get(row, column) != Go::Stone::empty) {
+      throw IllegalMove("Not empty point");
     }
     mBoard.set(row, column, Go::Stone::black);
     mState = GameState ::white_turn;
@@ -22,6 +24,8 @@ public:
   constexpr auto white_move(unsigned int row, unsigned int column) {
     if (mState != GameState::white_turn) {
       throw IllegalMove("Not whites turn");
+    } else if (mBoard.get(row, column) != Go::Stone::empty) {
+      throw IllegalMove("Not empty point");
     }
     mBoard.set(row, column, Go::Stone::white);
     mState = GameState ::black_turn;
