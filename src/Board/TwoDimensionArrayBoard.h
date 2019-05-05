@@ -10,9 +10,9 @@ namespace Go {
 
 template <unsigned int Row, unsigned int Column> class TwoDimensionArrayBoard {
 public:
-  constexpr auto get(const unsigned int row, const unsigned int column) const { return mBoard.at(row).at(column); }
+  constexpr auto get(const unsigned int row, const unsigned int column) const{ return mBoard.at(row).at(column); }
   constexpr void set(const unsigned int row, const unsigned int column, const Stone stone) { mBoard.at(row).at(column) = stone; }
-  constexpr auto getDimension() { return Dimension{Row, Column}; };
+  constexpr auto getDimension() const noexcept { return Dimension{Row, Column}; };
 
   constexpr bool operator==(const TwoDimensionArrayBoard<Row, Column> &b) const { return mBoard == b.mBoard; };
 
