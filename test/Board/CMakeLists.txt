@@ -22,7 +22,10 @@ add_executable(UnorderedMapBoardTest UnorderedMapBoardTest.cpp)
 target_link_libraries(UnorderedMapBoardTest GTest::Main Board)
 add_test(NAME UnorderedMapBoard COMMAND UnorderedMapBoardTest)
 
-add_executable(BoardUtilTest Util/BoardTransformationTest.cpp)
+add_executable(BoardUtilTest 
+  Util/BoardRotationTest.cpp
+  Util/BoardInversionTest.cpp
+)
 target_link_libraries(BoardUtilTest GTest::Main Board)
 add_test(NAME Board/Util COMMAND BoardUtilTest)
 
