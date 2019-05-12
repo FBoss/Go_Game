@@ -91,6 +91,24 @@ private:
   }
 };
 
+template <typename T>
+constexpr auto group_remove(T &board, const Go::Stone color, const unsigned int row, const unsigned int column) noexcept {
+  if (not(row >= 0 && row < board.getDimension().row) || not(column >= 0 && column < board.getDimension().column)) {
+    return;
+  }
+
+  if (board.get(row, column) == color) {
+    board.set(row, column, Go::Stone::empty);
+  } else {
+    return;
+  }
+
+  group_remove(board, color, row - 1, column);
+  group_remove(board, color, row, column + 1);
+  group_remove(board, color, row + 1, column);
+  group_remove(board, color, row, column - 1);
+}
+
 } // namespace Go::Rules::Group
 
 #endif // GO_RULES_GROUP_H
