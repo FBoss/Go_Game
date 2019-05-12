@@ -39,15 +39,18 @@ template <typename T> constexpr auto position_has_liberty(const T &board, const 
 
 template <typename T> class group_has_liberty {
 public:
-  constexpr group_has_liberty(const T &board, const Go::Stone color, const unsigned int row, const unsigned int column) noexcept
-      : mBoard{board}, mColor{color}, mRow{row}, mColumn{column} {}
+  constexpr group_has_liberty(const T &board, const unsigned int row, const unsigned int column) noexcept
+      : mBoard{board}, mRow{row}, mColumn{column} {}
 
-  constexpr auto operator()() noexcept { return check_group_has_liberty(mRow, mColumn); }
+  constexpr auto operator()() noexcept {
+    mColor = mBoard.get(mRow, mColumn);
+    return check_group_has_liberty(mRow, mColumn);
+  }
 
 private:
   const T &mBoard;
   T mVisited{};
-  const Go::Stone mColor;
+  Go::Stone mColor = Go::Stone::empty;
   const unsigned int mRow;
   const unsigned int mColumn;
 
