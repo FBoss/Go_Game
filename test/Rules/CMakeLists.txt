@@ -9,6 +9,9 @@ add_test(NAME StrasbourgRules COMMAND StrasbourgRulesTest)
 
 
 
-add_executable(GroupTest GroupTest.cpp)
+add_executable(GroupTest 
+  Group_hasLiberty_Test.cpp
+  Group_positionHasLiberty_Test.cpp
+)
 target_link_libraries(GroupTest GTest::Main Rules)
 add_test(NAME Group COMMAND GroupTest)

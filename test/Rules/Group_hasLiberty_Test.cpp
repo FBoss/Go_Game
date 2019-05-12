@@ -110,14 +110,14 @@ constexpr auto board4() noexcept {
   return board;
 }
 
-TEST(has_liberty, 1x1_board_empty) {
+TEST(group_has_liberty, 1x1_board_empty) {
   Go::TwoDimensionArrayBoard<1, 1> board{};
   board.set(0, 0, Go::Stone::empty);
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
 }
 
-TEST(has_liberty, 1x1_board_color_match) {
+TEST(group_has_liberty, 1x1_board_color_match) {
   Go::TwoDimensionArrayBoard<1, 1> board{};
   board.set(0, 0, Go::Stone::black);
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
@@ -126,7 +126,7 @@ TEST(has_liberty, 1x1_board_color_match) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
 }
 
-TEST(has_liberty, 1x1_board_color_differ) {
+TEST(group_has_liberty, 1x1_board_color_differ) {
   Go::TwoDimensionArrayBoard<1, 1> board{};
   board.set(0, 0, Go::Stone::black);
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
@@ -135,7 +135,7 @@ TEST(has_liberty, 1x1_board_color_differ) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
 }
 
-TEST(has_liberty, 1x2board_liberty) {
+TEST(group_has_liberty, 1x2board_liberty) {
   Go::TwoDimensionArrayBoard<1, 2> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(0, 1, Go::Stone::empty);
@@ -150,7 +150,7 @@ TEST(has_liberty, 1x2board_liberty) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 0, 1)());
 }
 
-TEST(has_liberty, 1x2board_no_liberty) {
+TEST(group_has_liberty, 1x2board_no_liberty) {
   Go::TwoDimensionArrayBoard<1, 2> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(0, 1, Go::Stone::black);
@@ -167,7 +167,7 @@ TEST(has_liberty, 1x2board_no_liberty) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 0, 1)());
 }
 
-TEST(has_liberty, 2x1board_no_liberty) {
+TEST(group_has_liberty, 2x1board_no_liberty) {
   Go::TwoDimensionArrayBoard<2, 1> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(1, 0, Go::Stone::black);
@@ -184,7 +184,7 @@ TEST(has_liberty, 2x1board_no_liberty) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board, 1, 0)());
 }
 
-TEST(has_liberty, 2x2_empty) {
+TEST(group_has_liberty, 2x2_empty) {
   Go::TwoDimensionArrayBoard<2, 2> board{};
 
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 0, 0)());
@@ -193,7 +193,7 @@ TEST(has_liberty, 2x2_empty) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 1, 1)());
 }
 
-TEST(has_liberty, 2x2_1point) {
+TEST(group_has_liberty, 2x2_1point) {
   Go::TwoDimensionArrayBoard<2, 2> board{};
   board.set(0, 0, Go::Stone::black);
 
@@ -209,7 +209,7 @@ TEST(has_liberty, 2x2_1point) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::rotate(Go::Util::rotate(Go::Util::rotate(board))), 1, 0)());
 }
 
-TEST(has_liberty, 2x2_2points) {
+TEST(group_has_liberty, 2x2_2points) {
   Go::TwoDimensionArrayBoard<2, 2> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(0, 1, Go::Stone::black);
@@ -226,7 +226,7 @@ TEST(has_liberty, 2x2_2points) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::rotate(Go::Util::rotate(Go::Util::rotate(board))), 0, 0)());
 }
 
-TEST(has_liberty, loop) {
+TEST(group_has_liberty, loop) {
   Go::TwoDimensionArrayBoard<3, 3> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(0, 1, Go::Stone::black);
@@ -249,7 +249,7 @@ TEST(has_liberty, loop) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board), 2, 2)());
 }
 
-TEST(has_liberty, 2x2_3points_same_color) {
+TEST(group_has_liberty, 2x2_3points_same_color) {
   Go::TwoDimensionArrayBoard<2, 2> board{};
   board.set(0, 0, Go::Stone::black);
   board.set(0, 1, Go::Stone::black);
@@ -275,7 +275,7 @@ TEST(has_liberty, 2x2_3points_same_color) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 1, 0)());
 }
 
-TEST(has_liberty, scenario1) {
+TEST(group_has_liberty, scenario1) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board1(), 0, 0)());
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board1()), 0, 0)());
 
@@ -286,132 +286,22 @@ TEST(has_liberty, scenario1) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board1()), 2, 1)());
 }
 
-TEST(has_liberty, scenario2) {
+TEST(group_has_liberty, scenario2) {
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board2(), 2, 3)());
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board2()), 2, 3)());
 }
 
-TEST(has_liberty, scenario3) {
+TEST(group_has_liberty, scenario3) {
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board3(), 2, 3)());
   EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board3()), 2, 3)());
 }
 
-TEST(has_liberty, scenario4) {
-  auto board = board4();
-  EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board, 2, 2)());
-  EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board), 2, 2)());
+TEST(group_has_liberty, scenario4) {
+  EXPECT_TRUE(Go::Rules::Group::group_has_liberty(board4(), 2, 2)());
+  EXPECT_TRUE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board4()), 2, 2)());
 
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(board4(), 0, 3)());
   EXPECT_FALSE(Go::Rules::Group::group_has_liberty(Go::Util::invert(board4()), 0, 3)());
 }
 
-TEST(position_has_liberty, out_of_bounds) {
-  Go::TwoDimensionArrayBoard<1, 1> board{};
-
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 0, 0));
-
-  board.set(0, 0, Go::Stone::black);
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 0, 0));
-  board.set(0, 0, Go::Stone::white);
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 0, 0));
-}
-
-TEST(position_has_liberty, 4_liberty) {
-  Go::TwoDimensionArrayBoard<3, 3> board{};
-  board.set(0, 0, Go::Stone::black);
-  board.set(2, 2, Go::Stone::black);
-  board.set(0, 1, Go::Stone::white);
-  board.set(2, 0, Go::Stone::white);
-
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-}
-
-TEST(position_has_liberty, 3_liberty) {
-  Go::TwoDimensionArrayBoard<3, 3> board{};
-  board.set(0, 0, Go::Stone::black);
-  board.set(2, 2, Go::Stone::black);
-  board.set(0, 1, Go::Stone::white);
-  board.set(2, 0, Go::Stone::white);
-  board.set(0, 1, Go::Stone::black);
-
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-}
-
-TEST(position_has_liberty, 2_liberty) {
-  Go::TwoDimensionArrayBoard<3, 3> board{};
-  board.set(0, 0, Go::Stone::black);
-  board.set(2, 2, Go::Stone::black);
-  board.set(0, 1, Go::Stone::white);
-  board.set(2, 0, Go::Stone::white);
-
-  board.set(0, 1, Go::Stone::black);
-  board.set(2, 1, Go::Stone::white);
-
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-}
-
-TEST(position_has_liberty, 1_liberty) {
-  Go::TwoDimensionArrayBoard<3, 3> board{};
-  board.set(0, 0, Go::Stone::black);
-  board.set(2, 2, Go::Stone::black);
-  board.set(0, 1, Go::Stone::white);
-  board.set(2, 0, Go::Stone::white);
-
-  board.set(0, 1, Go::Stone::black);
-  board.set(1, 0, Go::Stone::black);
-  board.set(2, 1, Go::Stone::white);
-
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_TRUE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-}
-
-TEST(position_has_liberty, 0_liberty) {
-  Go::TwoDimensionArrayBoard<3, 3> board{};
-  board.set(0, 0, Go::Stone::black);
-  board.set(2, 2, Go::Stone::black);
-  board.set(0, 1, Go::Stone::white);
-  board.set(2, 0, Go::Stone::white);
-
-  board.set(0, 1, Go::Stone::black);
-  board.set(1, 0, Go::Stone::black);
-  board.set(2, 1, Go::Stone::white);
-  board.set(1, 2, Go::Stone::white);
-
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-
-  board = Go::Util::rotate(board);
-  EXPECT_FALSE(Go::Rules::Group::position_has_liberty(board, 1, 1));
-}
 } // namespace
