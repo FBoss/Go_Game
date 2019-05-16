@@ -12,5 +12,7 @@ add_library(Rules INTERFACE)
 target_include_directories(Rules INTERFACE Rules)
 target_link_libraries(Rules INTERFACE Board)
 
+add_library(Math INTERFACE)
+target_include_directories(Math INTERFACE Math)
 
 add_subdirectory(GoTextProtocol)
