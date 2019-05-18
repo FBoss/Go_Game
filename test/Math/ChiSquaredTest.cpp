@@ -50,7 +50,7 @@ TEST(chi_squared, DataSet2) {
   EXPECT_FALSE(val);
 }
 
-TEST(constants, eulerNumber) { EXPECT_DOUBLE_EQ(Go::e(), 2.71828182845904523536028747135266249775724709369995); }
+// TEST(constants, eulerNumber) { EXPECT_DOUBLE_EQ(Go::e(), 2.71828182845904523536028747135266249775724709369995); }
 /*
     TEST(exponential, exp_0){
         EXPECT_EQ(Go::exp(0), 1);
