@@ -16,3 +16,12 @@ add_executable(GroupTest
 )
 target_link_libraries(GroupTest GTest::Main Rules)
 add_test(NAME Group COMMAND GroupTest)
+
+
+
+
+add_executable(ScoringTest
+  territory_scoring_Test.cpp
+)
+target_link_libraries(ScoringTest GTest::Main Rules)
+add_test(NAME Scoring COMMAND ScoringTest)
