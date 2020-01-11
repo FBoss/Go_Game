@@ -1,6 +1,8 @@
 #ifndef MAPBOARD_H
 #define MAPBOARD_H
 
+#include "Board.h"
+
 #include "Dimension.h"
 #include "Stone.h"
 
@@ -9,7 +11,7 @@
 
 namespace Go {
 
-template <unsigned int Row, unsigned int Column> class MapBoard {
+template <unsigned int Row, unsigned int Column> class MapBoard : public Board<MapBoard<Row, Column>> {
 public:
   constexpr auto get(const unsigned int row, const unsigned int column) const {
     if (row >= Row) {

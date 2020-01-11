@@ -1,6 +1,8 @@
 #ifndef TWODIMENSIONARRAYBOARD_H
 #define TWODIMENSIONARRAYBOARD_H
 
+#include "Board.h"
+
 #include "Dimension.h"
 #include "Stone.h"
 
@@ -8,10 +10,10 @@
 
 namespace Go {
 
-template <unsigned int Row, unsigned int Column> class TwoDimensionArrayBoard {
+template <int Row, int Column> class TwoDimensionArrayBoard : public Board<TwoDimensionArrayBoard<Row, Column>> {
 public:
-  constexpr auto get(const unsigned int row, const unsigned int column) const{ return mBoard.at(row).at(column); }
-  constexpr void set(const unsigned int row, const unsigned int column, const Stone stone) { mBoard.at(row).at(column) = stone; }
+  constexpr auto get(const int row, const int column) const { return mBoard.at(row).at(column); }
+  constexpr void set(const int row, const int column, const Stone stone) { mBoard.at(row).at(column) = stone; }
   constexpr auto getDimension() const noexcept { return Dimension{Row, Column}; };
 
   constexpr bool operator==(const TwoDimensionArrayBoard<Row, Column> &b) const { return mBoard == b.mBoard; };

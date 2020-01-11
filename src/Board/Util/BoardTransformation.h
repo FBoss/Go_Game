@@ -1,7 +1,8 @@
 #ifndef GO_BOARDTRANSFORMATION_H
 #define GO_BOARDTRANSFORMATION_H
 
-#include <Stone.h>
+#include "Board.h"
+#include "Stone.h"
 
 namespace Go::Util{
 

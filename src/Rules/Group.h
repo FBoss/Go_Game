@@ -1,7 +1,7 @@
 #ifndef GO_RULES_GROUP_H
 #define GO_RULES_GROUP_H
 
-#include <Stone.h>
+#include "Stone.h"
 
 namespace Go::Rules::Group {
 

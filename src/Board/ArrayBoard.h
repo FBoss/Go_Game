@@ -1,6 +1,8 @@
 #ifndef ARRAYBOARD_H
 #define ARRAYBOARD_H
 
+#include "Board.h"
+
 #include "Dimension.h"
 #include "Stone.h"
 
@@ -9,7 +11,7 @@
 
 namespace Go {
 
-template <unsigned int Row, unsigned int Column> class ArrayBoard {
+template <unsigned int Row, unsigned int Column> class ArrayBoard : public Board<ArrayBoard<Row, Column>> {
 public:
   constexpr auto get(const unsigned int row, const unsigned int column) const { return mBoard.at(calculateIndex(row, column)); }
   constexpr void set(const unsigned int row, const unsigned int column, const Stone stone) {

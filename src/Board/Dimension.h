@@ -4,8 +4,8 @@
 namespace Go {
 
 struct Dimension {
-  unsigned int row;
-  unsigned int column;
+  int row;
+  int column;
 };
 
 } // namespace Go

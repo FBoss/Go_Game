@@ -1,6 +1,8 @@
 #ifndef BITFIELDBOARD_H
 #define BITFIELDBOARD_H
 
+#include "Board.h"
+
 #include "Dimension.h"
 #include "Stone.h"
 
@@ -9,7 +11,7 @@
 
 namespace Go {
 
-template <unsigned int Row, unsigned int Column> class BitFieldBoard {
+template <unsigned int Row, unsigned int Column> class BitFieldBoard : public Board<BitFieldBoard<Row, Column>> {
 public:
   constexpr auto get(const unsigned int row, const unsigned int column) const {
     return static_cast<Stone>((mBoard.at(row).test(2 * column + 1) << 1) | mBoard.at(row).test(2 * column));

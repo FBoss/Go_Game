@@ -5,6 +5,7 @@ add_subdirectory(Stone)
 add_subdirectory(Rules)
 add_subdirectory(Math)
 add_subdirectory(GoTextProtocol)
+add_subdirectory(GameEngine)
 
 
 
