@@ -187,7 +187,7 @@ using BoardImpl = TwoDimensionArrayBoard<9, 9>;
 class StrassbourgEngine : public Go::GameEngine::GameEngine<StrassbourgEngine> {
 public:
   void play_black(int row, int column) {
-    if (not(mTurn != Stone::white)) {
+    if (not(mState == GameState::start || mState == GameState::turn_black || mState == GameState::end_of_game)) {
       throw std::runtime_error("not blacks turn");
     }
     if (not isPlayValid(mBoard, {row, column}, Stone::black, mKo)) {
@@ -196,7 +196,7 @@ public:
 
     mBoard.set(row, column, Stone::black);
     mPlayerPassed = false;
-    mTurn = Stone::white;
+    mState = GameState::turn_white;
 
     const auto captured = capture(mBoard, {row, column});
 
@@ -210,10 +210,14 @@ public:
     } else {
       mKo = std::nullopt;
     }
+
+    if (mPrisoners.black >= 5) {
+      mState = GameState::game_over;
+    }
   }
 
   void play_white(int row, int column) {
-    if (not(mTurn != Stone::black)) {
+    if (not(mState == GameState::start || mState == GameState::turn_white || mState == GameState::end_of_game)) {
       throw std::runtime_error("not whites turn");
     }
 
@@ -222,7 +226,7 @@ public:
     }
     mBoard.set(row, column, Stone::white);
     mPlayerPassed = false;
-    mTurn = Stone::black;
+    mState = GameState::turn_black;
 
     const auto captured = capture(mBoard, {row, column});
 
@@ -236,23 +240,39 @@ public:
     } else {
       mKo = std::nullopt;
     }
+
+    if (mPrisoners.white >= 5) {
+      mState = GameState::game_over;
+    }
   }
 
   void play_white_pass() {
-    if (not(mTurn != Stone::black)) {
+    if (not(mState == GameState::start || mState == GameState::turn_white)) {
       throw std::runtime_error("not whites turn");
     }
+
+    if (mPlayerPassed == true) {
+      mState = GameState::end_of_game;
+    } else {
+      mState = GameState::turn_black;
+    }
+
     mPlayerPassed = true;
-    mTurn = Stone::black;
     mKo = std::nullopt;
   }
 
   void play_black_pass() {
-    if (not(mTurn != Stone::white)) {
+    if (not(mState == GameState::start || mState == GameState::turn_black)) {
       throw std::runtime_error("not blacks turn");
     }
+
+    if (mPlayerPassed == true) {
+      mState = GameState::end_of_game;
+    } else {
+      mState = GameState::turn_white;
+    }
+
     mPlayerPassed = true;
-    mTurn = Stone::white;
     mKo = std::nullopt;
   }
 
@@ -260,10 +280,32 @@ public:
 
   const Prisoners &prisoners() { return mPrisoners; }
 
+  Score score() {
+    int score_white = mPrisoners.white;
+    int score_black = mPrisoners.black;
+    ScoreType type = ScoreType::ongoing;
+    std::optional<Stone> winner = std::nullopt;
+
+    if (mState == GameState::game_over) {
+      type = ScoreType::score;
+      if (score_black > score_white) {
+        winner = Stone::black;
+      } else if (score_black < score_white) {
+        winner = Stone::white;
+      } else {
+        type = ScoreType::jigo;
+      }
+    }
+
+    return Score{score_black, score_white, winner, type};
+  }
+
+  GameState state() { return mState; };
+
 private:
   BoardImpl mBoard;
 
-  Stone mTurn = Stone::empty;
+  GameState mState = GameState::start;
 
   std::optional<Point> mKo;
 
