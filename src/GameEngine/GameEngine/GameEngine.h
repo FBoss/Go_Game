@@ -10,6 +10,8 @@ struct Prisoners {
   int white;
 };
 
+enum class GameState { start, turn_white, turn, _black, end_of_game, game_over };
+
 constexpr bool operator==(const Prisoners &lhs, const Prisoners &rhs) { return lhs.black == rhs.black && lhs.white == rhs.white; }
 
 constexpr bool operator!=(const Prisoners &lhs, const Prisoners &rhs) { return lhs.black != rhs.black || lhs.white != rhs.white; }

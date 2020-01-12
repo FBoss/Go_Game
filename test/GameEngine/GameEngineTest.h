@@ -11,7 +11,7 @@ namespace Go::GameEngine {
 
 using Group = std::vector<Point>;
 
-template <typename T> Group group(Board<T> &board, const Point &point) {
+template <typename T> Group group(const Board<T> &board, const Point &point) {
   Group group{};
 
   if (not isPointValid<T>(point)) {
@@ -90,6 +90,98 @@ template <typename T> Liberties liberties(const Board<T> &board, const Group &gr
   return list;
 }
 
+struct CapturedStones {
+  std::vector<Group> black;
+  std::vector<Group> white;
+};
+
+template <typename T> CapturedStones capture(const Board<T> &board, const Point &point) {
+  CapturedStones captured{};
+  if (isPointValid<T>(point)) {
+
+    const auto update_capture_list = [&](const Point &p) -> void {
+      if (Group grp = group(board, p); liberties(board, grp).empty()) {
+        if (board.get(p) == Stone::black) {
+          bool is_permutation = false;
+
+          for (const auto &group : captured.black) {
+            is_permutation |= std::is_permutation(grp.begin(), grp.end(), group.begin());
+          }
+
+          if (not is_permutation) {
+            captured.black.emplace_back(grp);
+          }
+        } else if (board.get(p) == Stone::white) {
+          bool is_permutation = false;
+
+          for (const auto &group : captured.white) {
+            is_permutation |= std::is_permutation(grp.begin(), grp.end(), group.begin());
+          }
+
+          if (not is_permutation) {
+            captured.white.emplace_back(grp);
+          }
+        }
+      }
+    };
+
+    if (const Point p{point.row - 1, point.column}; isPointValid<T>(p)) {
+      update_capture_list(p);
+    }
+    if (const Point p{point.row + 1, point.column}; isPointValid<T>(p)) {
+      update_capture_list(p);
+    }
+    if (const Point p{point.row, point.column - 1}; isPointValid<T>(p)) {
+      update_capture_list(p);
+    }
+    if (const Point p{point.row, point.column + 1}; isPointValid<T>(p)) {
+      update_capture_list(p);
+    }
+  }
+  return captured;
+}
+
+template <typename T> bool isPlayValid(T b, const Point &point, Stone player, std::optional<Point> ko = std::nullopt) {
+  Board<T> &board = b;
+  // check coodrinates
+  if (not isPointValid<T>(point)) {
+    return false;
+  }
+
+  // check empty point
+  if (board.get(point) != Stone::empty) {
+    return false;
+  }
+  board.set(point, player);
+
+  const auto captured = capture<T>(board, point);
+
+  if (Stone::black == player) {
+    if (captured.white.size() == 1) {
+      if (captured.white.front().front() == ko.value_or(Point{-1, -1})) {
+        return false;
+      }
+    }
+
+    std::for_each(captured.white.begin(), captured.white.end(), [&](const auto &grp) { remove_group(board, grp); });
+  } else {
+
+    if (captured.black.size() == 1) {
+      if (captured.black.front().front() == ko.value_or(Point{-1, -1})) {
+        return false;
+      }
+    }
+
+    std::for_each(captured.black.begin(), captured.black.end(), [&](const auto &grp) { remove_group(board, grp); });
+  }
+
+  if (liberties(board, group(board, point)).empty()) {
+    return false;
+  }
+
+  return true;
+}
+
 using BoardImpl = TwoDimensionArrayBoard<9, 9>;
 
 class StrassbourgEngine : public Go::GameEngine::GameEngine<StrassbourgEngine> {
@@ -98,7 +190,7 @@ public:
     if (not(mTurn != Stone::white)) {
       throw std::runtime_error("not blacks turn");
     }
-    if (not is_play_valid(Stone::black, row, column)) {
+    if (not isPlayValid(mBoard, {row, column}, Stone::black, mKo)) {
       throw std::runtime_error("invalid play");
     }
 
@@ -106,39 +198,17 @@ public:
     mPlayerPassed = false;
     mTurn = Stone::white;
 
-    if (Point point{row - 1, column}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.black += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
+    const auto captured = capture(mBoard, {row, column});
 
-    if (Point point{row, column - 1}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.black += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
-    if (Point point{row + 1, column}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.black += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
+    std::for_each(captured.white.begin(), captured.white.end(), [&](const auto &group) {
+      remove_group(mBoard, group);
+      mPrisoners.black += group.size();
+    });
 
-    if (Point point{row, column + 1}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.black += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
+    if (captured.white.size() == 1 && captured.white.front().size() == 1) {
+      mKo = Point{row, column};
+    } else {
+      mKo = std::nullopt;
     }
   }
 
@@ -147,46 +217,24 @@ public:
       throw std::runtime_error("not whites turn");
     }
 
-    if (not is_play_valid(Stone::black, row, column)) {
+    if (not isPlayValid(mBoard, {row, column}, Stone::white, mKo)) {
       throw std::runtime_error("invalid play");
     }
     mBoard.set(row, column, Stone::white);
     mPlayerPassed = false;
     mTurn = Stone::black;
 
-    if (Point point{row - 1, column}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.white += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
+    const auto captured = capture(mBoard, {row, column});
 
-    if (Point point{row, column - 1}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.white += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
-    if (Point point{row + 1, column}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.white += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
-    }
+    std::for_each(captured.black.begin(), captured.black.end(), [&](const auto &group) {
+      remove_group(mBoard, group);
+      mPrisoners.white += group.size();
+    });
 
-    if (Point point{row, column + 1}; isPointValid<BoardImpl>(point)) {
-      if (mBoard.get(point.row, point.column) == mTurn) {
-        if (Group grp = group(mBoard, point); liberties(mBoard, grp).empty()) {
-          mPrisoners.white += grp.size();
-          remove_group(mBoard, grp);
-        }
-      }
+    if (captured.black.size() == 1 && captured.black.front().size() == 1) {
+      mKo = Point{row, column};
+    } else {
+      mKo = std::nullopt;
     }
   }
 
@@ -196,6 +244,7 @@ public:
     }
     mPlayerPassed = true;
     mTurn = Stone::black;
+    mKo = std::nullopt;
   }
 
   void play_black_pass() {
@@ -204,52 +253,7 @@ public:
     }
     mPlayerPassed = true;
     mTurn = Stone::white;
-  }
-
-  bool is_play_valid(Stone stone, int row, int column) const {
-    if (mBoard.get(row, column) != Stone::empty) {
-      return false;
-    }
-
-    auto board = mBoard;
-    board.set(row, column, stone);
-
-    if (Point point{row - 1, column}; isPointValid<BoardImpl>(point)) {
-      if (board.get(point.row, point.column) != mTurn) {
-        if (Group grp = group(board, point); liberties(board, grp).empty()) {
-          remove_group(board, grp);
-        }
-      }
-    }
-
-    if (Point point{row, column - 1}; isPointValid<BoardImpl>(point)) {
-      if (board.get(point.row, point.column) != mTurn) {
-        if (Group grp = group(board, point); liberties(board, grp).empty()) {
-          remove_group(board, grp);
-        }
-      }
-    }
-    if (Point point{row + 1, column}; isPointValid<BoardImpl>(point)) {
-      if (board.get(point.row, point.column) != mTurn) {
-        if (Group grp = group(board, point); liberties(board, grp).empty()) {
-          remove_group(board, grp);
-        }
-      }
-    }
-
-    if (Point point{row, column + 1}; isPointValid<BoardImpl>(point)) {
-      if (board.get(point.row, point.column) != mTurn) {
-        if (Group grp = group(board, point); liberties(board, grp).empty()) {
-          remove_group(board, grp);
-        }
-      }
-    }
-
-    if (liberties(board, group(board, {row, column})).empty()) {
-      return false;
-    }
-
-    return true;
+    mKo = std::nullopt;
   }
 
   const auto &board() { return mBoard; }
@@ -260,6 +264,8 @@ private:
   BoardImpl mBoard;
 
   Stone mTurn = Stone::empty;
+
+  std::optional<Point> mKo;
 
   bool mPlayerPassed = false;
   Prisoners mPrisoners;

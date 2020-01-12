@@ -12,7 +12,6 @@ struct Point {
 };
 
 constexpr bool operator==(const Point &lhs, const Point &rhs) { return lhs.row == rhs.row && lhs.column == rhs.column; }
-
 constexpr bool operator!=(const Point &lhs, const Point &rhs) { return lhs.row != rhs.row || lhs.column != rhs.column; }
 
 template <typename BOARD> struct Board {
@@ -22,7 +21,6 @@ template <typename BOARD> struct Board {
   Dimension getDimension() { return static_cast<BOARD *>(this)->getDimension(); };
 
   bool operator==(const BOARD &board) const { return static_cast<BOARD &>(this) == board; };
-
   bool operator!=(const BOARD &board) const { return static_cast<BOARD &>(this) != board; };
 };
 
