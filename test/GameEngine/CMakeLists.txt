@@ -9,6 +9,7 @@ add_executable(GameEngineTest
  05_Capture.cpp
  06_Ko.cpp
  09_EndOfGame.cpp
+ 10_Determining_the_result.cpp
 )
 target_link_libraries(GameEngineTest GTest::Main GameEngine)
 target_include_directories(GameEngineTest PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})

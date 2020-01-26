@@ -4,6 +4,7 @@
 #include "Board.h"
 
 #include <optional>
+#include <vector>
 
 namespace Go::GameEngine {
 
@@ -19,6 +20,11 @@ struct Score {
   int white;
   std::optional<Stone> winner;
   ScoreType type;
+};
+
+struct Territory {
+  Point point;
+  Stone player;
 };
 
 constexpr bool operator==(const Score &lhs, const Score &rhs) {
@@ -42,13 +48,15 @@ template <typename Engine> struct GameEngine {
 
   void play_white_pass() { static_cast<Engine *>(this)->play_white_pass(); }
 
+  void remove_dead_stones(const std::vector<Point> &stones) { static_cast<Engine *>(this)->remove_dead_stones(stones); }
+  void place_stones(const std::vector<Territory> &stones) { static_cast<Engine *>(this)->place_stones(stones); }
   bool is_play_valid(Stone stone, int row, int column) { return static_cast<Engine *>(this)->is_play_valid(stone, row, column); }
 
   const auto &board() { return static_cast<Engine *>(this)->board(); }
 
   const Prisoners &prisoners() { return static_cast<Engine *>(this)->prisoners(); }
 
-  Score score() { return static_cast<Engine *>(this)->score(); }
+  Score score(const std::vector<Territory> &territory = {}) { return static_cast<Engine *>(this)->score(territory); }
   GameState state() { return static_cast<Engine *>(this)->state(); }
 };
 

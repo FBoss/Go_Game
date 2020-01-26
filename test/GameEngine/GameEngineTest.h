@@ -280,11 +280,40 @@ public:
 
   const Prisoners &prisoners() { return mPrisoners; }
 
-  Score score() {
+  Score score(const std::vector<Territory> &territory = {}) {
     int score_white = mPrisoners.white;
     int score_black = mPrisoners.black;
     ScoreType type = ScoreType::ongoing;
     std::optional<Stone> winner = std::nullopt;
+
+    if (mState == GameState::end_of_game) {
+
+      for (int x = 0; x < mBoard.getDimension().row; ++x) {
+        for (int y = 0; y < mBoard.getDimension().column; ++y) {
+          const auto point = mBoard.get(x, y);
+          if (point == Stone::empty) {
+            const auto iterator = std::find_if(territory.begin(), territory.end(), [&](const auto &terr) {
+              if (terr.point == Point{x, y}) {
+                return true;
+              } else {
+                return false;
+              }
+            });
+            if (iterator != territory.end()) {
+              if (iterator->player == Stone::black) {
+                ++score_black;
+              } else if (iterator->player == Stone::white) {
+                ++score_white;
+              }
+            }
+          } else if (point == Stone::white) {
+            ++score_white;
+          } else {
+            ++score_black;
+          }
+        }
+      }
+    }
 
     if (mState == GameState::game_over) {
       type = ScoreType::score;
@@ -301,6 +330,32 @@ public:
   }
 
   GameState state() { return mState; };
+
+  void remove_dead_stones(const std::vector<Point> &points) {
+    if (mState != GameState::end_of_game) {
+      throw std::runtime_error("removing dead stones is not allow in current game state");
+    }
+
+    for (const auto &point : points) {
+      const auto stone = mBoard.get(point.row, point.column);
+
+      if (stone == Stone::black) {
+        ++mPrisoners.white;
+      } else if (stone == Stone::white) {
+        ++mPrisoners.black;
+      }
+
+      mBoard.set(point.row, point.column, Stone::empty);
+    }
+  }
+
+  void place_stones(const std::vector<Territory> &stones) {
+    if (mState != GameState::end_of_game) {
+      throw std::runtime_error("removing dead stones is not allow in current game state");
+    }
+
+    std::for_each(stones.begin(), stones.end(), [&](const auto &entry) { mBoard.set(entry.point.row, entry.point.column, entry.player); });
+  }
 
 private:
   BoardImpl mBoard;
