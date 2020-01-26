@@ -41,12 +41,13 @@ constexpr bool operator!=(const Prisoners &lhs, const Prisoners &rhs) { return l
 
 template <typename Engine> struct GameEngine {
   void play_black(int row, int column) { static_cast<Engine *>(this)->play_black(row, column); }
-
   void play_white(int row, int column) { static_cast<Engine *>(this)->play_white(row, column); }
 
   void play_black_pass() { static_cast<Engine *>(this)->play_black_pass(); }
-
   void play_white_pass() { static_cast<Engine *>(this)->play_white_pass(); }
+
+  void play_black_resign() { static_cast<Engine *>(this)->play_black_resign(); }
+  void play_white_resign() { static_cast<Engine *>(this)->play_white_resign(); }
 
   void remove_dead_stones(const std::vector<Point> &stones) { static_cast<Engine *>(this)->remove_dead_stones(stones); }
   void place_stones(const std::vector<Territory> &stones) { static_cast<Engine *>(this)->place_stones(stones); }
