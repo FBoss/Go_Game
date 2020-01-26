@@ -18,3 +18,4 @@ target_include_directories(Math INTERFACE Math)
 add_subdirectory(GoTextProtocol)
 
 add_subdirectory(GameEngine)
+add_subdirectory(Tournament)

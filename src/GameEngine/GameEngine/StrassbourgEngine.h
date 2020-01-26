@@ -245,6 +245,11 @@ public:
     }
   }
 
+  bool is_play_valid(Stone stone, int row, int column)
+  {
+      return isPlayValid(mBoard, {row, column}, stone, mKo);
+  }
+
   void play_white_pass() {
     if (not(mState == GameState::start || mState == GameState::turn_white)) {
       throw std::runtime_error("not whites turn");
