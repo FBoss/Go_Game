@@ -1,10 +1,10 @@
 #include "GameEngine/StrassbourgEngine.h"
 
+#include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <iostream>
-#include <algorithm>
 #include <random>
-
 
 namespace Go::GameEngine::Player {
 
@@ -81,33 +81,17 @@ struct RandomPlayer : public Player<ResignPlayer<Engine>, Engine>, Contestant<En
 
 template <typename Engine>
 struct MonteCarloTreeSearchPlayer : public Player<MonteCarloTreeSearchPlayer<Engine>, Engine>, Contestant<Engine> {
-  MonteCarloTreeSearchPlayer() : Contestant<Engine>{2000, "MCTS"} {};
+  MonteCarloTreeSearchPlayer(unsigned int numberOfNodes, unsigned int depth, unsigned int playoutNumber)
+      : Contestant<Engine>{2000,
+                           {std::string{"MCTS-N"} + std::to_string(numberOfNodes) + "-D" + std::to_string(depth) + "-P" +
+                            std::to_string(playoutNumber)}},
+        mNumberOfNodes{numberOfNodes}, mDepth{depth}, mPlayoutNumber{playoutNumber} {};
 
   Move nextMove(Engine &engine, Stone stone) override {
-    Node root{0, 0, engine, stone, {}, createNodes(engine, stone)};
+    Node root = createTree(engine, stone);
 
-    for (auto &child : root.childeren) {
-      for (int i = 0; i < mRoundNumber; ++i) {
-        Engine playoutEngine = child.engine;
-        playout(playoutEngine, inverse(stone));
-        auto score = playoutEngine.score();
-        if (score.type == ScoreType::score) {
-          if (score.winner.value() == child.stone) {
-            ++child.win;
-          }
-        } else if (score.type == ScoreType::ongoing) {
-          if (child.stone == Stone::black) {
-            if (score.black > score.white) {
-              ++child.win;
-            }
-          } else {
-            if (score.black < score.white) {
-              ++child.win;
-            }
-          }
-        }
-        ++child.played;
-      }
+    for (unsigned int i = 0; i < mPlayoutNumber; ++i) {
+      playout(root);
     }
 
     const auto best_move =
@@ -126,25 +110,81 @@ private:
     std::vector<Node> childeren;
   };
 
-  std::vector<Node> createNodes(Engine engine, Stone stone) {
-    std::vector<Node> nodes{};
+  Node createTree(Engine &engine, Stone stone) {
+    Node root{0, 0, engine, stone, {}, {}};
 
-    while (nodes.size() != mWidth) {
-      Node node{0, 0, engine, stone, generateRandomMove(engine, stone), {}};
-      applyMove(node.engine, node.move, stone);
-      nodes.emplace_back(node);
+    unsigned int nodeCount = 0;
+
+    const std::function<void(Node &, int)> addNode = [&](Node &node, int depth) {
+      if (depth == 0) {
+        return;
+      }
+
+      if (node.engine.state() == GameState::game_over || node.engine.state() == GameState::end_of_game) {
+        return;
+      }
+
+      const unsigned int path = std::uniform_int_distribution<>(0, node.childeren.size())(generator);
+
+      if (path == node.childeren.size() || node.childeren.empty()) {
+        Node newNode{0, 0, node.engine, node.stone, generateRandomMove(node.engine, node.stone), {}};
+        applyMove(newNode.engine, newNode.move, newNode.stone);
+        newNode.stone = inverse(newNode.stone);
+        node.childeren.emplace_back(newNode);
+        ++nodeCount;
+      } else {
+        addNode(node.childeren.at(path), --depth);
+      }
+    };
+
+    while (nodeCount < mNumberOfNodes) {
+      addNode(root, mDepth);
     }
 
-    return nodes;
+    return root;
   }
 
   Stone inverse(Stone stone) { return (stone == Stone::black ? Stone::white : Stone::black); }
 
-  void playout(Engine &engine, Stone stone) {
-    while (engine.state() != GameState::game_over && engine.state() != GameState::end_of_game) {
-      auto move = generateRandomMove(engine, stone);
-      applyMove(engine, move, stone);
-      stone = inverse(stone);
+  int playout(Node &node) {
+    ++node.played;
+
+    if (node.childeren.empty()) {
+      auto playoutEngine = node.engine;
+      Stone stone = node.stone;
+
+      while (playoutEngine.state() != GameState::game_over && playoutEngine.state() != GameState::end_of_game) {
+        auto move = generateRandomMove(playoutEngine, stone);
+        applyMove(playoutEngine, move, stone);
+        stone = inverse(stone);
+      }
+
+      auto score = playoutEngine.score();
+      if (score.type == ScoreType::score) {
+        if (score.winner.value() == node.stone) {
+          ++node.win;
+          return 1;
+        }
+      } else if (score.type == ScoreType::ongoing) {
+        if (node.stone == Stone::black) {
+          if (score.black > score.white) {
+            ++node.win;
+            return 1;
+          }
+        } else {
+          if (score.black < score.white) {
+            ++node.win;
+            return 1;
+          }
+        }
+      }
+      return 0;
+    } else {
+      const int path = std::uniform_int_distribution<>(0, node.childeren.size() - 1)(generator);
+
+      const int result = playout(node.childeren.at(path));
+      node.win += result;
+      return result;
     }
   }
 
@@ -164,8 +204,9 @@ private:
     }
   }
 
-  const unsigned int mWidth = 2;
-  const int mRoundNumber = 10;
+  const unsigned int mNumberOfNodes;
+  const unsigned int mDepth;
+  const unsigned int mPlayoutNumber;
 };
 
 template <typename Engine>
@@ -219,23 +260,30 @@ int main()
 {
     using namespace Go::GameEngine::Player;
 
-    constexpr int numberOfRounds = 10;
+    constexpr int numberOfRounds = 20;
 
     using UsedEngine = Go::GameEngine::StrassbourgEngine;
 
-    MonteCarloTreeSearchPlayer<UsedEngine> mcts{};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts1{2, 1, 10};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts2{2, 1, 20};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts3{2, 1, 30};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts4{2, 1, 40};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts5{2, 1, 50};
+    MonteCarloTreeSearchPlayer<UsedEngine> mcts6{2, 1, 60};
     ResignPlayer<UsedEngine> resign{};
     PassPlayer<UsedEngine> pass{};
     RandomPlayer<UsedEngine> random{};
 
-    std::vector<Contestant<UsedEngine> *> contestants{&mcts, &random, &pass, &resign};
+    std::vector<Contestant<UsedEngine> *> contestants{&mcts1, &mcts2, &mcts3, &mcts4, &mcts5, &mcts6, &random};
 
     if(contestants.size()% 2 != 0)
     {
-        throw std::runtime_error("not enough contestants");
+      contestants.emplace_back(&pass);
     }
 
     auto rng = std::default_random_engine {};
+
+    const std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     for(int i = 0; i < numberOfRounds; ++i)
     {
@@ -287,6 +335,10 @@ int main()
         player_white->ranking = player_white->ranking + 50*(result_value_white-estimate_white);
     }
     }
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+    std::cout << "Elapsed time: " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << '\n';
 
     std::sort(contestants.begin(), contestants.end(), [](const auto & left, const auto & right){return left->ranking>right->ranking;});
 
