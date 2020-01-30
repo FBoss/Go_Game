@@ -273,7 +273,7 @@ int main()
 {
     using namespace Go::GameEngine::Player;
 
-    constexpr int numberOfRounds = 750;
+    constexpr int numberOfRounds = 500;
 
     using UsedEngine = Go::GameEngine::StrassbourgEngine;
 
@@ -326,51 +326,53 @@ int main()
 
     for(int i = 0; i < numberOfRounds; ++i)
     {
-        std::shuffle(contestants.begin(), contestants.end(), rng);
+      std::cout << "starting round: " << i << std::endl;
 
-        const auto gamePlay = [](auto player_black, auto player_white) {
-          const auto result = compete(player_black, player_white);
+      std::shuffle(contestants.begin(), contestants.end(), rng);
 
-          float estimate_black = 1 / (1 + std::pow(10, (player_white->ranking - player_black->ranking) / 400));
-          float estimate_white = 1 - estimate_black;
+      const auto gamePlay = [](auto player_black, auto player_white) {
+        const auto result = compete(player_black, player_white);
 
-          float result_value_black = [&]() {
-            if (result.type == Go::GameEngine::ScoreType::jigo) {
+        float estimate_black = 1 / (1 + std::pow(10, (player_white->ranking - player_black->ranking) / 400));
+        float estimate_white = 1 - estimate_black;
+
+        float result_value_black = [&]() {
+          if (result.type == Go::GameEngine::ScoreType::jigo) {
+            return 0.5;
+          }
+          if (result.type == Go::GameEngine::ScoreType::win_by_resign || result.type == Go::GameEngine::ScoreType::score) {
+            if (result.winner == Go::Stone::black) {
+              return 1.0;
+            } else {
+              return 0.0;
+            }
+          }
+          if (result.type == Go::GameEngine::ScoreType::ongoing) {
+            if (result.black == result.white) {
               return 0.5;
+            } else if (result.black > result.white) {
+              return 1.0;
+            } else {
+              return 0.0;
             }
-            if (result.type == Go::GameEngine::ScoreType::win_by_resign || result.type == Go::GameEngine::ScoreType::score) {
-              if (result.winner == Go::Stone::black) {
-                return 1.0;
-              } else {
-                return 0.0;
-              }
-            }
-            if (result.type == Go::GameEngine::ScoreType::ongoing) {
-              if (result.black == result.white) {
-                return 0.5;
-              } else if (result.black > result.white) {
-                return 1.0;
-              } else {
-                return 0.0;
-              }
-            }
-            return 0.0;
-          }();
+          }
+          return 0.0;
+        }();
 
-          float result_value_white = 1 - result_value_black;
+        float result_value_white = 1 - result_value_black;
 
-          player_black->ranking = player_black->ranking + 50 * (result_value_black - estimate_black);
-          player_white->ranking = player_white->ranking + 50 * (result_value_white - estimate_white);
-        };
+        player_black->ranking = player_black->ranking + 50 * (result_value_black - estimate_black);
+        player_white->ranking = player_white->ranking + 50 * (result_value_white - estimate_white);
+      };
 
-        auto a2 = std::async(gamePlay, &pass, &resign);
-        std::vector<decltype(a2)> gamesInThisRound{};
+      auto a2 = std::async(gamePlay, &pass, &resign);
+      std::vector<decltype(a2)> gamesInThisRound{};
 
-        for (auto iterator = contestants.begin(); iterator != contestants.end(); iterator = iterator + 2) {
-          const auto player_black = *iterator;
-          const auto player_white = *(iterator + 1);
-          gamesInThisRound.emplace_back(std::async(gamePlay, player_black, player_white));
-          // gamePlay(player_black, player_white);
+      for (auto iterator = contestants.begin(); iterator != contestants.end(); iterator = iterator + 2) {
+        const auto player_black = *iterator;
+        const auto player_white = *(iterator + 1);
+        gamesInThisRound.emplace_back(std::async(gamePlay, player_black, player_white));
+        // gamePlay(player_black, player_white);
     }
     }
 
