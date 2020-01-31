@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-option(BUILD_TESTING "Build Test" ON)
-option(BUILD_BENCHMARKS "Build Benchmarks" ON)
+option(BUILD_TESTING "Build Test" OFF)
+option(BUILD_BENCHMARKS "Build Benchmarks" OFF)
 
 include(CTest)
 set(CMAKE_CXX_STANDARD 17)
