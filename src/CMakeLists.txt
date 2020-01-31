@@ -19,3 +19,4 @@ add_subdirectory(GoTextProtocol)
 
 add_subdirectory(GameEngine)
 add_subdirectory(Tournament)
+add_subdirectory(ComputerPlayer)

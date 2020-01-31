@@ -1,4 +1,6 @@
 #include "GameEngine/StrassbourgEngine.h"
+#include "player/player.h"
+#include "player/random.h"
 
 #include <algorithm>
 #include <chrono>
@@ -8,30 +10,6 @@
 #include <random>
 
 namespace Go::GameEngine::Player {
-
-enum class MoveType { move, pass, resign };
-
-struct Move
-{
-    MoveType type;
-    Point point;
-};
-
-template <typename PLAYER, typename Engine>
-struct Player{
-
-  Move nextMove(Engine &engine, Stone stone) { return static_cast<PLAYER *>(this)->nextMove(engine, stone); }
-};
-
-template <typename Engine>
-struct Contestant
-{
-    Contestant(int rank, std::string contestant_name): ranking{rank}, name{contestant_name}{}
-    virtual Move nextMove(Engine &engine, Stone stone) = 0;
-
-    int ranking;
-    std::string name;
-};
 
 template <typename Engine>
 struct ResignPlayer : public Player<ResignPlayer<Engine>, Engine>, Contestant<Engine>
@@ -47,38 +25,7 @@ struct PassPlayer : public Player<ResignPlayer<Engine>, Engine>, Contestant<Engi
     Move nextMove(Engine &, Stone) override { return Move{MoveType::pass, {}}; }
 };
 
-static std::default_random_engine generator{};
 
-template <typename Engine> Move generateRandomMove(GameEngine<Engine> &engine, Stone stone) {
-  // std::random_device r;
-  //{r()};
-  std::uniform_int_distribution<int> rowDistribution(0, engine.board().getDimension().row - 1);
-  std::uniform_int_distribution<int> columnDistribution(0, engine.board().getDimension().column - 1);
-
-  int row = rowDistribution(generator);
-  int column = columnDistribution(generator);
-
-  for (int limit = 1000; not engine.is_play_valid(stone, row, column); --limit) {
-    row = rowDistribution(generator);
-    column = columnDistribution(generator);
-
-    if (limit <= 0) {
-      return Move{MoveType::pass, {}};
-    }
-  }
-  return Move{MoveType::move, {row, column}};
-}
-
-template <typename Engine>
-struct RandomPlayer : public Player<ResignPlayer<Engine>, Engine>, Contestant<Engine>
-{
-    RandomPlayer(): Contestant<Engine>{2000, "Random"} {};
-
-    Move nextMove(Engine &engine, Stone stone) override { return generateRandomMove(engine, stone); }
-
-  private:
-    std::default_random_engine generator;
-};
 
 template <typename Engine>
 struct MonteCarloTreeSearchPlayer : public Player<MonteCarloTreeSearchPlayer<Engine>, Engine>, Contestant<Engine> {

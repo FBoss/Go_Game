@@ -30,7 +30,7 @@ find_package(GTest REQUIRED)
 
 
 add_executable(GTPPrinter GTPPrinter.cpp)
-target_link_libraries(GTPPrinter PRIVATE GTPEngine)
+target_link_libraries(GTPPrinter PRIVATE GTPEngine GameEngine ComputerPlayer)
 set_target_properties(GTPPrinter PROPERTIES
             CXX_STANDARD 17
             CXX_STANDARD_REQUIRED ON
