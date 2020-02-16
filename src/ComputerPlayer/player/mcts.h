@@ -1,6 +1,13 @@
 #ifndef MONTECARLOTREESEARCH_PLAYER_H
 #define MONTECARLOTREESEARCH_PLAYER_H
 
+#include "player.h"
+#include "player/random.h"
+
+#include <cmath>
+#include <functional>
+#include <random>
+
 namespace Go::GameEngine::Player {
 
 template <typename Engine>
@@ -143,6 +150,7 @@ private:
   const unsigned int mDepth;
   const unsigned int mPlayoutNumber;
   Stone mPlayer;
+  std::default_random_engine generator{1};
 };
 
 } // namespace Go::GameEngine::Player
